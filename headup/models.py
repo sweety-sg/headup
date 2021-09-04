@@ -33,18 +33,18 @@ class Project(models.Model):
     members = models.ManyToManyField(User, related_name='members_p')
     project_admins = models.ManyToManyField(User, related_name='members_p_a')
 
-    class Meta:
-        managed = False
-        db_table = 'Project'
+    # class Meta:
+    #     managed = False
+    #     # db_table = 'Project'
 
 class TeamMembers(models.Model):
     menber_id = models.IntegerField( blank=True)
     role = models.CharField(max_length=255, blank=True, null=True)
     project_id = models.IntegerField()
 
-    class Meta:
-        managed = False
-        db_table = 'Team Members'
+    # class Meta:
+    #     managed = False
+    #     # db_table = 'Team Members'
 
 class Lists(models.Model):
     id = models.OneToOneField('Project', models.DO_NOTHING, db_column='id', primary_key=True)
@@ -53,9 +53,9 @@ class Lists(models.Model):
     project = models.ForeignKey(to=Project, on_delete=models.CASCADE, related_name='project_l')
     members = models.ManyToManyField(User, related_name='members')
 
-    class Meta:
-        managed = False
-        db_table = 'Lists'
+    # class Meta:
+    #     managed = False
+        
 
 class Cards(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -65,9 +65,9 @@ class Cards(models.Model):
     list = models.ForeignKey('Lists', models.DO_NOTHING, blank=True, null=True)
     
 
-    class Meta:
-        managed = False
-        db_table = 'Cards'
+    # class Meta:
+    #     managed = False
+        
 
 
 class Comments(models.Model):
@@ -76,9 +76,9 @@ class Comments(models.Model):
     comment_by = models.IntegerField(blank=True, null=True)
     card_id = models.IntegerField(blank=True, null=True)
 
-    class Meta:
-        managed = False
-        db_table = 'Comments'
+    # class Meta:
+    #     managed = False
+        
 
 
 
