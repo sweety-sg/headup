@@ -8,10 +8,11 @@ from rest_framework import serializers, viewsets
 from rest_framework import permissions
 from .serializers import UserSerializer,  TeamMemberSerializer, ListSerializer, CardSerializer , CommentSerializer , ProjectSerializer
 from rest_framework.renderers import JSONRenderer
-from .models import Users,Project,TeamMembers,Lists,Cards,Comments
+from .models import Project,TeamMembers,Lists,Cards,Comments
 from .param_settings.oauth2_params import auth_params
 import requests
 from .utils.auth_utils import login, if_loggedin
+from . import models
 # from headup.serializers import UserSerializer, GroupSerializer
 
 
@@ -75,7 +76,7 @@ def authcode(req):
         user_data = response_data.json()
 
         if user_data['person']['roles'][1]['role'] == 'Maintainer' and user_data['person']['roles'][1]['activeStatus'] == 'ActiveStatus.IS_ACTIVE':
-            user_object = Users.objects.update_or_create(
+            user_object = models.User.objects.update_or_create(
                 defaults = {
                     'id' : user_data['userId'],
                     'name' : user_data['person']['fullName'],
