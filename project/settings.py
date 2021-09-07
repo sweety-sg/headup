@@ -143,4 +143,4 @@ REST_FRAMEWORK = {
     ]
 }
 
-# AUTH_USER_MODEL = "headup.User" 
+AUTH_USER_MODEL = "headup.User" 

@@ -2,21 +2,21 @@ from django.db import models
 from django.utils import timezone
 from django.core.validators import MinLengthValidator
 from django.contrib.auth.models import AbstractUser
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
 
 
 # Create your models here.
 from django.db import models
 
-# class User(AbstractUser):
-#     id = models.BigIntegerField(primary_key=True)
-#     enrolment = models.IntegerField(blank= False)
-#     # user_id = models.IntegerField(blank= False)
-#     image = models.ImageField(blank=True)
-#     name = models.CharField(max_length=255, blank=True, null=True)
-#     email = models.CharField(db_column='Email', max_length=255, blank=True, null=True)  # Field name made lowercase.
-#     password = models.CharField(db_column='Password', max_length=255, blank=True, null=True)  # Field name made lowercase.
-#     grant_type = models.IntegerField(blank=True, null=True)
+class User(AbstractUser):
+    id = models.IntegerField(primary_key = True)
+    enrolment = models.IntegerField(blank= True ,null=True)
+    # user_id = models.IntegerField(blank= False)
+    image = models.ImageField(blank=True)
+    full_name = models.CharField(max_length=255, blank=True, null=True)
+    email = models.CharField(db_column='Email', max_length=255, blank=True, null=True)  # Field name made lowercase.
+    password = models.CharField(db_column='Password', max_length=255, blank=True, null=True)  # Field name made lowercase.
+    grant_type = models.IntegerField(blank=True, null=True)
 
 #     class Meta:
 #         managed = False
@@ -47,7 +47,8 @@ class TeamMembers(models.Model):
     #     # db_table = 'Team Members'
 
 class Lists(models.Model):
-    id = models.OneToOneField('Project', models.DO_NOTHING, db_column='id', primary_key=True)
+    # id = models.OneToOneField('Project', models.DO_NOTHING, db_column='id', primary_key=True)
+    id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=255, blank=True, null=True)
     # project_id = models.IntegerField(db_column='Project_id', blank=True, null=True)  # Field name made lowercase.
     project = models.ForeignKey(to=Project, on_delete=models.CASCADE, related_name='project_l')
@@ -61,7 +62,7 @@ class Cards(models.Model):
     id = models.IntegerField(primary_key=True)
     title = models.CharField(db_column='Title', max_length=255, blank=True, null=True)  # Field name made lowercase.
     description = models.TextField(blank=True, null=True)
-    asignees = models.IntegerField(blank=True, null=True)
+    asignees = models.ManyToManyField(User, related_name='asignees')
     list = models.ForeignKey('Lists', models.DO_NOTHING, blank=True, null=True)
     
 
