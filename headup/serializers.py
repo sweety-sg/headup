@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User, Group
 from rest_framework import serializers
-from .models import User,Project,TeamMembers,Lists,Cards,Comments
+from .models import User,Project,TeamMembers,Lists,Cards,Comment
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
@@ -44,7 +44,7 @@ class CardSerializer(serializers.ModelSerializer):
 class CommentSerializer(serializers.ModelSerializer):
     '''Comment Serializer'''
     class Meta:
-        model = Comments
+        model = Comment
         fields = '__all__'
 
 class TeamMemberSerializer(serializers.ModelSerializer):

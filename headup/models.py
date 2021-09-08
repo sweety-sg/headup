@@ -2,6 +2,7 @@ from django.db import models
 from django.utils import timezone
 from django.core.validators import MinLengthValidator
 from django.contrib.auth.models import AbstractUser
+from datetime import datetime
 # from django.contrib.auth.models import User
 
 
@@ -16,7 +17,8 @@ class User(AbstractUser):
     full_name = models.CharField(max_length=255, blank=True, null=True)
     email = models.CharField(db_column='Email', max_length=255, blank=True, null=True)  # Field name made lowercase.
     password = models.CharField(db_column='Password', max_length=255, blank=True, null=True)  # Field name made lowercase.
-    grant_type = models.IntegerField(blank=True, null=True)
+    is_admin = models.BooleanField(default=False)
+    disabled = models.BooleanField(default=False)
 
 #     class Meta:
 #         managed = False
@@ -29,19 +31,25 @@ class Project(models.Model):
     # creator_id = models.IntegerField(blank=True, null=True)
     creator = models.ForeignKey(to=User, on_delete=models.SET_NULL, null=True, related_name='proj_creator')
     status = models.CharField(max_length=15, blank=True, null=True)
+    start_date = models.DateTimeField(default=datetime.now)
     when = models.DateTimeField(blank=True, null=True)
-    members = models.ManyToManyField(User, related_name='members_p')
+    members = models.ManyToManyField(User, related_name='projects')
     project_admins = models.ManyToManyField(User, related_name='members_p_a')
 
+    
     # class Meta:
     #     managed = False
     #     # db_table = 'Project'
 
 class TeamMembers(models.Model):
-    menber_id = models.IntegerField( blank=True)
+    member = models.ForeignKey(to=User, on_delete=models.SET_NULL, null=True, related_name='team_member')
     role = models.CharField(max_length=255, blank=True, null=True)
-    project_id = models.IntegerField()
-
+    project = models.ForeignKey(to=Project, on_delete=models.CASCADE, related_name='project_member', default=None)
+    
+    class Meta(object):
+        # ordering = ['when']
+        '''unique list names in a particular project model'''
+        unique_together = ('member', 'project')
     # class Meta:
     #     managed = False
     #     # db_table = 'Team Members'
@@ -62,7 +70,7 @@ class Cards(models.Model):
     id = models.IntegerField(primary_key=True)
     title = models.CharField(db_column='Title', max_length=255, blank=True, null=True)  # Field name made lowercase.
     description = models.TextField(blank=True, null=True)
-    asignees = models.ManyToManyField(User, related_name='asignees')
+    asignees = models.ManyToManyField(User, related_name='cards')
     list = models.ForeignKey('Lists', models.DO_NOTHING, blank=True, null=True)
     
 
@@ -71,15 +79,31 @@ class Cards(models.Model):
         
 
 
-class Comments(models.Model):
+class Comment(models.Model):
     id = models.IntegerField(primary_key=True)
     text = models.TextField(blank=True, null=True)
-    comment_by = models.IntegerField(blank=True, null=True)
-    card_id = models.IntegerField(blank=True, null=True)
+    comment_by = models.ForeignKey(to=User, null=True, on_delete=models.SET_NULL, related_name='commentor')
+    card = models.ForeignKey(to=Cards,on_delete=models.CASCADE)
+    time = models.DateTimeField(default=datetime.now)
 
-    # class Meta:
-    #     managed = False
-        
+    class Meta(object):
+        ordering = ['time']
+
+    
+class question(models.Model):
+    '''
+    Questions regarding project
+    '''
+
+    content = models.TextField()
+    sender = models.ForeignKey(to=User, null=True, on_delete=models.SET_NULL, related_name='asked_by')
+    time = models.DateTimeField(default=datetime.now)
+    project = models.ForeignKey(to=Project,on_delete=models.CASCADE)
+
+    class Meta(object):
+        ordering = ['time']
+
+    
 
 
 
