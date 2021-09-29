@@ -1,5 +1,6 @@
 pyvenv.cfg
 lib
+node_modules
 # Django #
 *.log
 *.pot

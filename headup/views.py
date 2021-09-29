@@ -19,6 +19,7 @@ from rest_framework.decorators import action,api_view, permission_classes
 from django.contrib.auth import authenticate, login,logout,get_user_model
 from django.contrib.auth.decorators import login_required, permission_required
 from django.conf import settings
+from rest_framework.authtoken.models import Token
 
 User = get_user_model()
 # from headup.serializers import UserSerializer, GroupSerializer
@@ -28,7 +29,7 @@ class UserViewSet(viewsets.ModelViewSet):
     """
      Allows users to be viewed or updated.
     """
-    queryset = User.objects.all().order_by('username')
+    queryset = User.objects.all().order_by('id')
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
@@ -36,16 +37,21 @@ class UserViewSet(viewsets.ModelViewSet):
     @action(methods=['GET'], detail = False, url_path='projects',url_name='user-projects')
     def user_projects(self,request):
         if(request.user.is_authenticated and not (request.user.disabled)):
-            serializer = ProjectSerializer(request.user.Project.all(), many = True)
+            serializer = ProjectSerializer(request.user.projects.all(), many = True)
             return Response(serializer.data)
         else:
             return HttpResponseForbidden()
     
     @action(methods=['GET'], detail = False, url_path='cards',url_name='user-cards')
     def user_cards(self,request):
-        if(request.user.is_authenticated):
+        if(request.user.is_authenticated and not (request.user.disabled)):
             serializer = CardSerializer(request.user.cards.all(), many = True)
+            # res= Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+            # res['Access-Control-Allow-Origin']='http://127.0.0.1:3000'
+            # res['Access-Control-Allow-Credentials']='true'
+
             return Response(serializer.data)
+            # return res
         else:
             return HttpResponseForbidden()
     
@@ -75,11 +81,12 @@ class UserViewSet(viewsets.ModelViewSet):
 
     def get_permissions(self):
         if self.request.method == 'GET':
-            self.permission_classes = [NotDisabled]
+            self.permission_classes = [ NotDisabled]
         elif self.request.method == 'PUT' or self.request.method == 'PATCH':
-            self.permission_classes = [permissions.IsAdminUser,NotDisabled]
+            self.permission_classes = [isSelforAdmin,NotDisabled]
+            # self.permission_classes = [NotDisabled]
         elif self.request.method == 'POST' or self.request.method == 'DELETE':
-            self.permission_classes = [isSelforAdmin]
+            self.permission_classes = [isSelforAdmin, NotDisabled]
 
         return super(UserViewSet, self).get_permissions()
 
@@ -87,13 +94,16 @@ class ProjectViewSet(viewsets.ModelViewSet):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
     
-    def project_create(self,serializer):
-       serializer.save(creator = self.request.user)
+    def project_create(self, serializer):
+    #    serializer.save(creator = self.request.user)
+       if self.request.method == 'POST' :
+            self.permission_classes = [permissions.IsAuthenticated,NotDisabled]
     
     def get_permissions(self):
-        if self.request.method == 'GET' or self.request.method == 'POST':
+        if self.request.method == 'GET' :
             self.permission_classes = [permissions.IsAuthenticated,NotDisabled]
-        elif self.request.method == 'PUT' or self.request.method == 'PATCH' or self.request.method == 'DELETE':
+            # self.permission_classes = [noPerm]
+        elif self.request.method == 'PUT' or self.request.method == 'PATCH' or self.request.method == 'DELETE' or self.request.method == 'POST':
                 self.permission_classes = [permissions.IsAuthenticated,IsAdminOrTeamMember,NotDisabled]
         return super(ProjectViewSet, self).get_permissions()
 
@@ -105,7 +115,7 @@ class ListViewSet(viewsets.ModelViewSet):
         if self.request.method == 'GET':
             self.permission_classes = [permissions.IsAuthenticated,NotDisabled]
         elif self.request.method == 'PUT' or self.request.method == 'PATCH' or self.request.method == 'DELETE' or self.request.method == 'POST':
-            self.permission_classes = [permissions.IsAuthenticated,IsAdminOrTeamMember,NotDisabled]
+            self.permission_classes = [permissions.IsAuthenticated,IsAdminOrMemberbyList,NotDisabled]
 
         return super(ListViewSet, self).get_permissions()
 
@@ -116,9 +126,12 @@ class CardViewSet(viewsets.ModelViewSet):
     def get_permissions(self):
         if self.request.method == 'GET':
             self.permission_classes = [permissions.IsAuthenticated, NotDisabled]
+            # self.permission_classes =[permissions.AllowAny,]
         elif self.request.method == 'PUT' or self.request.method == 'PATCH' or self.request.method == 'DELETE' or self.request.method == 'POST':
             self.permission_classes = [permissions.IsAuthenticated,IsAdminOrMemberbyCard,NotDisabled]
         return super(CardViewSet, self).get_permissions()
+
+    
 
 def index(req):
     return HttpResponse("Hello! login page")
@@ -180,8 +193,9 @@ def oauth_redirect(req):
     return HttpResponseRedirect(url)
 
 
-# @if_loggedin('headup:home')
+@api_view(['GET'])
 def authcode(req):
+    print("entered")
     params = {
         'client_id' : auth_params['CLIENT_ID'],
         'client_secret' : auth_params['CLIENT_SECRET'],
@@ -189,6 +203,8 @@ def authcode(req):
         'redirect_uri' : auth_params['REDIRECT_URI'],
         'code' : req.GET.get('code', None),
     }
+    # response= HttpResponseRedirect('http://localhost:3000/')
+    # response.set_cookie('code', req.GET.get('code', None))
     print(params)
     res = requests.post(
         "https://channeli.in/open_auth/token/", data=params)
@@ -199,32 +215,38 @@ def authcode(req):
         header = {
             "Authorization": "Bearer " + data['access_token']
         }
+
         response_data = requests.get(
             "https://channeli.in/open_auth/get_user_data/", headers=header)
         user_data = response_data.json()
 
         if user_data['person']['roles'][1]['role'] == 'Maintainer':
-            # user_object, created = User.objects.update_or_create(
-            #     username = user_data['student']['enrolmentNumber'],
-            #     defaults = {
-            #         'id' : user_data['userId'],
-            #         'full_name' : user_data['person']['fullName'],
-            #         'username': user_data['student']['enrolmentNumber'],
-            #         'image' : user_data['person']['displayPicture'],
-            #         'enrolment' : user_data['student']['enrolmentNumber'],
-            #     },
-                
-            # )
             try:
                 user_object = User.objects.get(username = user_data['student']['enrolmentNumber'])
                 login(req, user_object)
             except:
                 user_object = User.objects.create(username = user_data['student']['enrolmentNumber'],enrolment = user_data['student']['enrolmentNumber'],full_name = user_data['person']['fullName'],image = user_data['person']['displayPicture'], id = user_data['userId'], email= user_data['contactInformation']['instituteWebmailAddress'])
                 login(req, user_object)
+            
             print(user_data)
-            # print(created)
             print("hi")
-            return HttpResponseRedirect(reverse('headup:home'))
+            # response.set_cookie('access_token', data['access_token'])
+            info={
+                'data':'Done!', 
+                'isAdmin':user_object.is_admin , 
+                'NotDisabled' : user_object.disabled,
+            }
+            print("notokay")
+            res= Response(info, status=status.HTTP_202_ACCEPTED)
+            res['Access-Control-Allow-Origin']='http://127.0.0.1:3000'
+            res['Access-Control-Allow-Credentials']='true'
+
+            # return res
+            # return HttpResponseRedirect(('http://localhost:3000/login'))
+            login(req, user_object)
+            return res
+            # return HttpResponseRedirect(reverse('headup:home'))
+            # return response 
         else:
             return HttpResponseNotAllowed('Sorry! This site is only accessible to IMG maintainers.')
     else:
@@ -232,6 +254,11 @@ def authcode(req):
 
     
 def logout_view(request):
-    logout(request)
+    if request.user.is_authenticated:
+            logout(request)
+            return JsonResponse({'status': 'successful'})
+    else:
+        return HttpResponseForbidden()
+
     # Redirect to a success page.
     
