@@ -41,9 +41,12 @@ class isSelforAdmin(permissions.BasePermission):
         for person in User.objects.all().iterator():
             if person.is_admin and person == request.user:
                 return True
-
-            if request.user.id == session['user_id']:
-                return True
+        try:
+            if int(request.user.id) == int(view.kwargs.get('pk')):
+                    # print("yes")
+                    return True
+        except:
+            pass
         return False
 
 class noPerm(permissions.BasePermission):
@@ -55,5 +58,13 @@ class  IsAdminOrMemberbyCard(permissions.BasePermission):
         if request.method in permissions.SAFE_METHODS or request.user.is_admin:
             return True
         if request.user in obj.list.project.members.all():
+            return True
+        return False
+
+class IsAdminOrMemberbyList(permissions.BasePermission):
+    def has_object_permission(self,request,view,obj):
+        if request.method in permissions.SAFE_METHODS or request.user.is_admin:
+            return True
+        if request.user in obj.project.members.all():
             return True
         return False

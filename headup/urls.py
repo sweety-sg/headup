@@ -15,10 +15,11 @@ urlpatterns = [
     path('' , home , name='home'),
     path('login', oauth_redirect, name = 'oauth_redirect'),
     path('oauth', authcode, name = 'authcode'),
-    path('user/<int:pk>', UserDetail, name = 'UserDetail'),
-    path('project', Projects_v.as_view()),
-    path('project/<int:pk>/lists', Lists_v.as_view()),
+    # path('user/<int:pk>', UserDetail, name = 'UserDetail'),
+    path('projects', Projects_v.as_view()),
+    # path('project/<int:pk>/lists', Lists_v.as_view()),
     path('project/<int:pk>/lists/<int:lk>', Cards_v.as_view()),
     path('project/<int:pk>/members', MembersofProject_v.as_view()),
     
 ]
+urlpatterns += router.urls
