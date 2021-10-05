@@ -2,6 +2,9 @@ import React from 'react'
 import axios from 'axios'
 import { Divider } from '@material-ui/core';
 import ListItem from '@material-ui/core/ListItem';
+import { Card } from '@mui/material';
+import Cardstyle from './components/Cardstyle';
+
 // import Divider from '@material-ui/core/Divider';
 
 class Data extends React.Component {
@@ -35,23 +38,27 @@ class Data extends React.Component {
     }
     renderItems = () => {
             const newItems = this.state.cards
-            return newItems.map(card => (
-              <div>
-                <ListItem><li 
-                key={card.id}
-              >
-                <span 
-                  >
-                    {card.title}
-                  </span>
-                  <p>{card.description}</p>
-              </li></ListItem>
-              <Divider />
+            
+            // return newItems.map(card => (
+              
+            //   <div>
+            //     <Cardstyle title= {card.title} subtitle={card.list} content={card.description}/>
+            //     <Divider/>
+            //   </div>
+                 
+            // ));
+            return(
+              <div style={{display:"flex", justifycontent: "space-evenly", flexDirection :"row", flexWrap:'wrap'}}>
+                {newItems.map((card) => (
+                     <div style={{margin: "20", display:"flex", padding:15}}>
+                     <Cardstyle title= {card.title} subtitle={card.list} content={card.description}/>
+                     <Divider/>
+                   </div>
+                    ))}
               </div>
-              
-              
-            ));
+            )
           };
+          
       
           render(){
             return (

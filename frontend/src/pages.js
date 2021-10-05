@@ -9,20 +9,37 @@ import PeopleIcon from '@material-ui/icons/People';
 import BarChartIcon from '@material-ui/icons/BarChart';
 import LayersIcon from '@material-ui/icons/Layers';
 import AssignmentIcon from '@material-ui/icons/Assignment';
+import { Tooltip } from '@material-ui/core';
+import { Link } from 'react-router-dom';
 
 export const mainListItems = (
   <div>
-    <ListItem button>
+    {/* <ListItem button>
       <ListItemIcon>
-        <DashboardIcon />
+        <Tooltip title="Dashboard" enterDelay={200} leaveDelay={100}>
+        <DashboardIcon onClick={() => window.open('http://127.0.0.1:3000/dashboard')}/>
+        </Tooltip>
+        
       </ListItemIcon>
       <ListItemText primary="Dashboard" />
+    </ListItem> */}
+    <ListItem button>
+    <Tooltip title="Dashboard" enterDelay={200} leaveDelay={100} placement="right">
+    <ListItemIcon>
+        <DashboardIcon onClick={() => window.open('http://127.0.0.1:3000/dashboard')}/>           
+      </ListItemIcon>
+      
+        </Tooltip>
+        <ListItemText primary="Dashboard" />
     </ListItem>
     <ListItem button>
-      <ListItemIcon>
-        <LayersIcon />
+    <Tooltip title="Boards" enterDelay={200} leaveDelay={100} placement="right">
+    <ListItemIcon>
+        <LayersIcon containerElement={<Link href="http://127.0.0.1:3000/dashboard"/>}/>           
       </ListItemIcon>
-      <ListItemText primary="Boards" />
+      
+        </Tooltip>
+        <ListItemText primary="All Boards" />
     </ListItem>
     <ListItem button>
       <ListItemIcon>

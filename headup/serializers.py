@@ -25,6 +25,18 @@ class UserSerializer(serializers.ModelSerializer):
 
 class ProjectSerializer(serializers.ModelSerializer):
     '''Project Serializer'''
+    project_members = serializers.SerializerMethodField('members')
+    def members(self, obj):
+        members_list = []
+        for user in list(obj.members.all()):
+            data = {
+                'id': user.id,
+                'full_name': user.full_name,
+                'enrolment': user.enrolment,
+            }
+            members_list.append(data)
+        return members_list
+
     class Meta:
         model = Project
         fields = '__all__'

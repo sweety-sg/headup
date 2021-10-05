@@ -1,5 +1,9 @@
 import React from 'react'
 import axios from 'axios'
+import Cardstyle from './Cardstyle';
+import { Divider } from '@material-ui/core';
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom"; 
+import EditProject from './editproject';
 
 class Project extends React.Component {
     constructor(props){
@@ -9,7 +13,9 @@ class Project extends React.Component {
           }
         // this.fetchTasks = this.fetchTasks.bind(this)
     }
-  
+    dialogfunc(){
+      console.log("called")
+    }
     async componentWillMount(){
       var headers = new Headers()
         headers = {
@@ -30,18 +36,28 @@ class Project extends React.Component {
         }
         // this.fetchTasks()
     }
+    
     renderItems = () => {
             const newItems = this.state.projects
-            return newItems.map(project => (
-              <li 
-                key={project.id}
-              >
-                <span 
-                  >
-                    {project.name}
-                  </span>
-              </li>
-            ));
+            var data={
+              project : newItems.at(0)
+            }
+            return(
+              <div style={{display:"flex", justifycontent: "space-evenly", flexDirection :"row", flexWrap:'wrap'}}>
+                {newItems.map((project) => (
+                  <>
+                  
+                    {/* <Link to="editproject" data={data}>hello</Link> */}
+                    
+                     <div style={{margin: "20", display:"flex", padding:15}}>
+                     <Cardstyle title= {project.name} subtitle={project.status} content={project.wiki}/>
+                     <Divider/>
+                   </div>
+                   </>
+                    ))}
+                    {/* <EditProject data={data} /> */}
+              </div>
+            )
           };
       
           render(){
@@ -56,6 +72,7 @@ class Project extends React.Component {
                   </div>
                 </div>
               </div>
+
             </main>
             )
           }

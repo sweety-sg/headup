@@ -10,7 +10,7 @@ from datetime import datetime
 from django.db import models
 
 class User(AbstractUser):
-    id = models.IntegerField(primary_key = True)
+    id = models.AutoField(primary_key = True)
     enrolment = models.IntegerField(blank= True ,null=True)
     # user_id = models.IntegerField(blank= False)
     image = models.ImageField(blank=True)
@@ -25,7 +25,7 @@ class User(AbstractUser):
 #         db_table = 'User'
 
 class Project(models.Model):
-    id = models.IntegerField(primary_key=True)
+    id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255, blank=True, null=True)
     wiki = models.TextField(blank=True, null=True)
     # creator_id = models.IntegerField(blank=True, null=True)

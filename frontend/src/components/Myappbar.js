@@ -1,8 +1,11 @@
-import React from 'react';
+import React, {useRef} from 'react';
+import axios from "axios";
+import Cookies from 'js-cookie';
+import { Redirect } from 'react-router-dom';
+import { useTheme, makeStyles } from "@material-ui/core/styles";
+import Dashboard from '../Dashboard';
 import clsx from 'clsx';
-import { makeStyles } from '@material-ui/core/styles';
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom"; 
-import LinkWrapper from "./components/linkwrapper";
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
 import Box from '@material-ui/core/Box';
@@ -16,37 +19,17 @@ import Badge from '@material-ui/core/Badge';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
-// import Link from '@material-ui/core/Link';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import GroupWorkIcon from '@material-ui/icons/GroupWork';
 import { Icon, Tooltip } from '@material-ui/core';
 import HomeIcon from '@material-ui/icons/Home';
-import {mainListItems ,secondaryListItems} from './pages.js' ;
-import Data from './data';
-import Project from './components/project';
+import {mainListItems ,secondaryListItems} from '../pages' ;
+import Data from '../data';
+import Project from './project';
 import AddIcon from '@mui/icons-material/Add';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-// import white from "material-ui/core/colors/white";
-
-function Copyright() {
-    return (
-      <Typography variant="body2" color="textSecondary" align="center">
-        {'Copyright © '}
-        <Link color="inherit" href="https://material-ui.com/">
-          Your Website
-        </Link>{' '}
-        {new Date().getFullYear()}
-        {'.'}
-      </Typography>
-    );
-  }
- function tonewPro(){
-   return(
-     <Link to="/newproject"></Link>
-   )
- }
 const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -140,8 +123,7 @@ const useStyles = makeStyles((theme) => ({
       fill: 'white'
     }
   }));
-  
-export default function Dashboard(props) {
+  export default function MyAppBar(props){
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
     const handleDrawerOpen = () => {
@@ -151,10 +133,9 @@ export default function Dashboard(props) {
       setOpen(false);
     };
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
-  
-    return (
-      <div className={classes.root}>
-        <CssBaseline />
+    return(
+        <div className={classes.root}>
+             <CssBaseline />
         <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
           <Toolbar className={classes.toolbar}>
             <IconButton
@@ -190,7 +171,7 @@ export default function Dashboard(props) {
             </IconButton>
             </Tooltip>
                </Link>
-            <Tooltip title="Add new project" onClick={tonewPro}>
+            <Tooltip title="Add new project" onClick={props.new}>
             <IconButton color="inherit">
               <Badge color="secondary">
                 <AddIcon />
@@ -204,37 +185,6 @@ export default function Dashboard(props) {
             </IconButton>
           </Toolbar>
         </AppBar>
-        <Drawer
-          variant="permanent"
-          classes={{
-            paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
-          }}
-          open={open}
-        >
-          <div className={classes.toolbarIcon}>
-            <IconButton onClick={handleDrawerClose}>
-              <ChevronLeftIcon />
-            </IconButton>
-          </div>
-          <Divider />
-          <List>{mainListItems}</List>
-          <Divider />
-          <List>{secondaryListItems}</List>
-        </Drawer>
-        <main className={classes.content}>
-          <div className={classes.appBarSpacer} />
-          <Container maxWidth="lg" className={classes.container}>
-          <Typography variant="h6">  Your Projects </Typography>
-          <Project />
-            <Typography variant="h6">  Your Cards </Typography>
-            <Data />
-            <Divider />
-            <Box pt={4}>
-              <Copyright />
-            </Box>
-            {props.containerElement}
-          </Container>
-        </main>
-      </div>
-    );
+        </div>
+    )
   }

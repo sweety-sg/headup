@@ -2,13 +2,17 @@ import logo from './logo.svg';
 import './App.css';
 import Users from './components/users/users'
 // import axios from '../../axios'
-import Dashboard from './Dashboard.js';
+import Dashboard from './Dashboard';
 import Data from './data.js';
 import {Route, Switch} from 'react-router-dom';
 import React from 'react';
 import Home from './components/Login/home';
 import Login from './components/Login/login';
 import Project from './components/project';
+import NewProject from './components/newProject';
+import  Cardstyle from './components/Cardstyle';
+import EditProject from './components/editproject';
+import ProjectPage from './components/projectpage';
 
 const App = () => {
   return (
@@ -27,6 +31,16 @@ const App = () => {
       <Route exact path="/projects">
         <Project />
       </Route>
+      <Route exact path="/newproject">
+        <NewProject />
+      </Route>
+      <Route exact path="/editproject">
+        <EditProject />
+      </Route>
+      <Route exact path="/cardstyle">
+        <Cardstyle />
+      </Route>
+      <Route exact path="/projects/:projectId" component={ProjectPage} />
       
       {/* <Users /> */}
     </div>

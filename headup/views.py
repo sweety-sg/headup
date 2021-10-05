@@ -20,6 +20,9 @@ from django.contrib.auth import authenticate, login,logout,get_user_model
 from django.contrib.auth.decorators import login_required, permission_required
 from django.conf import settings
 from rest_framework.authtoken.models import Token
+from slugify import slugify
+from datetime import datetime
+
 
 User = get_user_model()
 # from headup.serializers import UserSerializer, GroupSerializer
@@ -86,25 +89,92 @@ class UserViewSet(viewsets.ModelViewSet):
             self.permission_classes = [isSelforAdmin,NotDisabled]
             # self.permission_classes = [NotDisabled]
         elif self.request.method == 'POST' or self.request.method == 'DELETE':
-            self.permission_classes = [isSelforAdmin, NotDisabled]
+            self.permission_classes = [permissions.IsAuthenticated, NotDisabled]
 
         return super(UserViewSet, self).get_permissions()
 
 class ProjectViewSet(viewsets.ModelViewSet):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
+    permission_classes = [permissions.IsAuthenticated,NotDisabled]
     
-    def project_create(self, serializer):
+    def project_create(self, request, *args, **kwargs):
     #    serializer.save(creator = self.request.user)
        if self.request.method == 'POST' :
-            self.permission_classes = [permissions.IsAuthenticated,NotDisabled]
+            data = request.POST
+            name = data.get('name')
+            if ((name is not None) & (len(name) != 0)):
+                slug_name = slugify(name)
+                print(slug_name)
+                slugs = []
+                for p in Project.objects.all():
+                    slugs.append(slugify(p.name))
+                if slug_name in slugs:
+                    print("uff same name")
+                    return Response(
+                        {"message": "Project name should be unique."},
+                        status=status.HTTP_400_BAD_REQUEST
+                        
+                    )
+                else:
+                    print("unique name")
+                    wiki = data.get('wiki')
+                    project_status = data.get('status')
+                    when = data.get('when')
+                    project = Project.objects.create(
+                        name=name,
+                        wiki=wiki,
+                        status=project_status,
+                        start_date=datetime.now(),
+                        creator=request.user,
+                        when = when,
+                    )
+                    project_admins = data.get('project_admins')
+                    members = data.get('members')
+                    if ((members is not None) & (len(members) != 0)):
+                        memberIDs = members.split(',')
+                        members_list = list(
+                            User.objects.filter(id=memberIDs)
+                        )
+                        project.members.set(members_list)
+
+                    if ((project_admins is not None) & (len(project_admins) != 0)):
+                        adminIDs = project_admins.split(',')
+                        project_admins_list = list(
+                            User.objects.filter(id=adminIDs)
+                        )
+                        project.project_admins.set(project_admins_list)
+                    return Response(
+                        {"message": 'Project has been created.'},
+                        status=status.HTTP_201_CREATED
+                    )
+            return Response('Please enter a name', status=status.HTTP_400_BAD_REQUEST)
+
+    # def proj_update(self, serializer):
+    #     user_obj = self.request.user
+    #     if user_obj.is_admin:
+    #         serializer.save()
+        
+    #     else:
+    #         member_list = serializer.validated_data['members']
+    #         member_list.append(self.request.user)
+    #         serializer.save(members = member_list)
+
+
+    def proj_delete(self, request, *args, **kwargs):
+        if self.request.method == 'DELETE' :
+            proj = request.POST
+            id = proj.id
+            Project.objects.delete(id = id)
+            return Response('Deleted')
+        return Response('Could not delete')
     
     def get_permissions(self):
         if self.request.method == 'GET' :
             self.permission_classes = [permissions.IsAuthenticated,NotDisabled]
             # self.permission_classes = [noPerm]
         elif self.request.method == 'PUT' or self.request.method == 'PATCH' or self.request.method == 'DELETE' or self.request.method == 'POST':
-                self.permission_classes = [permissions.IsAuthenticated,IsAdminOrTeamMember,NotDisabled]
+                self.permission_classes = [permissions.IsAuthenticated,NotDisabled]
         return super(ProjectViewSet, self).get_permissions()
 
 class ListViewSet(viewsets.ModelViewSet):
