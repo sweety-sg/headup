@@ -163,7 +163,7 @@ const useStyles = makeStyles((theme) => ({
             </Typography>
             </Container>
             <Link to="/newproject" className={classes.linkcolor}>
-            <Tooltip title="Add new project">
+            <Tooltip title={props.addnew}>
             <IconButton style={{icon: {color: "white"}}}>
               <Badge color="secondary">
                 <AddIcon />
@@ -171,7 +171,7 @@ const useStyles = makeStyles((theme) => ({
             </IconButton>
             </Tooltip>
                </Link>
-            <Tooltip title="Add new project" onClick={props.new}>
+            <Tooltip title={props.addnew} onClick={props.newclick}>
             <IconButton color="inherit">
               <Badge color="secondary">
                 <AddIcon />

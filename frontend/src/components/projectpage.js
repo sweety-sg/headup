@@ -2,14 +2,16 @@ import React, {useRef} from 'react';
 import axios from "axios";
 import Cookies from 'js-cookie';
 import { Redirect } from 'react-router-dom';
-import { useTheme, makeStyles } from "@material-ui/core/styles";
+import { useTheme, makeStyles, createTheme } from "@material-ui/core/styles";
 import Dashboard from '../Dashboard';
 import clsx from 'clsx';
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom"; 
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
 import Box from '@material-ui/core/Box';
-import AppBar from '@material-ui/core/AppBar';
+import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
+import Avatar from '@mui/material/Avatar';
 import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
@@ -31,13 +33,48 @@ import Project from './project';
 import AddIcon from '@mui/icons-material/Add';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import MyAppBar from './Myappbar';
+import './style.css';
+import Button from '@mui/material/Button';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import Cardstyle from './Cardstyle';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import CommentIcon from '@mui/icons-material/Comment';
+import AssignmentIcon from '@mui/icons-material/Assignment';
+import CardContent from '@mui/material/CardContent';
+import CardsofList from './cardsoflist';
 
+
+
+const theme = createTheme({
+  typography: {
+    
+  },
+});
+
+theme.typography.h3 = {
+  fontSize: '1.2rem',
+  '@media (min-width:600px)': {
+    fontSize: '1.5rem',
+  },
+  [theme.breakpoints.up('md')]: {
+    fontSize: '2.4rem',
+  },
+};
+const useStyles = makeStyles((theme) => ({
+
+}))
 const ProjectPage=(props) =>{
-//   const classes = useStyles();
-  const Theme = useTheme();
+  const classes = useStyles();
+//   const Theme = useTheme();
   const projectId = props.match.params.projectId
   const [users, setUsers] = React.useState([]);
   const [project, setProject] = React.useState([]);
+  const [lists, setLists] = React.useState([]);
+  const [currlist, setcurrList] = React.useState([]);
+  var [currentCards, setCurrentCards] = React.useState([]);
+  const [allLists, setallLists] = React.useState([]);
+  const [allCards, setallCards] = React.useState([]);
+
   async function fetchUsers() {
     axios
         .get('http://127.0.0.1:3000/headup/user/')
@@ -56,26 +93,109 @@ React.useEffect(() => {
     // setAlert({
     //   open: false,
     // });
-  axios
-  .get("http://127.0.0.1:3000/headup/project/"+projectId+"/")
-  .then((res) => {
-    console.log(res.data);
-    setProject(res.data);
-    console.log("yes");
-  })
-  .catch((err) => {
-    console.log(err);
-    console.log("no");
-  });
-}, [props.match.params.projectId]);
+axios
+.get("http://127.0.0.1:3000/headup/project/"+projectId+"/")
+.then((res) => {
+  console.log(res.data);
+  setProject(res.data);
+  console.log("yes");
+})
+.catch((err) => {
+  console.log(err);
+  console.log("no");
+});
+axios
+.get("http://127.0.0.1:3000/headup/projects/"+projectId+"/lists")
+.then((res) => {
+  console.log(res.data[0]);
+  setLists(res.data);
+  console.log("yes");
+})
+.catch((err) => {
+  console.log(err);
+  console.log("no");
+});
 
 
+},[]);
+
+
+// function fetchCards(lis){
+//     var listId = lis.id
+//     console.log("called for " + listId)
+//     axios
+//     .get("http://127.0.0.1:8000/headup/project/" +projectId+"/lists/" + listId ).then((res) =>{
+//         console.log(res.data);
+//         setCurrentCards(res.data);
+//         console.log("yes");
+//     })
+//     .catch((err) => {
+//         console.log(err);
+//         console.log("no");
+//       });
+      
+// }
+
+// async function componentWillMount(){
+//     {lists.map((list) => (
+//         <>
+//         {fetchCards.call(this,list)}
+//         {data.append(currentCards)}
+        
+//         </>
+//     ))};
+// }
 
 return(
     // "hello"
     <>
-    <MyAppBar/>
-            </>
+    
+    <MyAppBar addnew="Add new list"/>
+
+    <div style={{marginTop:"50px", padding:"2rem"}}>
+    <div className="columnflex">
+    <Typography variant="h4" className="font-head">
+        {project.name}
+    </Typography>
+    <Button variant="contained" style={{marginLeft:"2rem", padding:"12px", height:"60%"}} endIcon={<VisibilityIcon/>} flexWrap>
+    Visibility
+    </Button>
+    </div>
+    
+    <Divider/>
+    <div style={{display:"flex", justifycontent: "space-evenly", flexDirection :"row", flexWrap:'wrap'}}>
+                {lists.map((list) => (
+                  <>
+                    {/* {fetchCards.call(this,list)} */}
+                   
+                     <div style={{margin: "20", display:"flex", padding:15}}>
+                     <Card sx={{ maxWidth: 345 }} style= {{display:"flex", flexDirection: "column", justifyContent: "space-between"}}>
+                        <CardHeader
+                        avatar={
+                        <Avatar sx={{ bgcolor: "#336EF1" }}>
+                            <AssignmentIcon />
+                          </Avatar>
+                        }
+                        action={
+                        <IconButton aria-label="settings" >
+                            <MoreVertIcon />
+                        </IconButton>
+                        }
+                        title={list.name}
+                        // subheader={props.subtitle}
+                    />
+                    
+                        <CardsofList listId={list.id} projectId= {projectId}/>
+                    
+                         </Card>
+                   </div>
+                   </>
+                    ))}
+                    
+              </div>
+    </div>
+    
+    </>
 )
 }
 

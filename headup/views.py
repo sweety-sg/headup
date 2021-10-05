@@ -241,7 +241,7 @@ class Lists_v(APIView):
         return JsonResponse(serializer.data , safe=False)
 
 class Cards_v(APIView):
-    def card(self,request,pk,lk):
+    def get(self,request,pk,lk):
         list = Lists.objects.get(id=lk)
         cards = Cards.objects.filter(list = list)
         serializer = CardSerializer(cards, many= True)
