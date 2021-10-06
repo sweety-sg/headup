@@ -30,6 +30,9 @@ import Data from '../data';
 import Project from './project';
 import AddIcon from '@mui/icons-material/Add';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import Modal from '@mui/material/Modal';
+import NewProject from './newProject';
+import './style.css'
 const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -124,8 +127,11 @@ const useStyles = makeStyles((theme) => ({
     }
   }));
   export default function MyAppBar(props){
+    const [openproj, setOpenproj] = React.useState(false);
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
+    const handleOpenproj = () => setOpenproj(!openproj);
+    const handleCloseproj = () => setOpenproj(false);
     const handleDrawerOpen = () => {
       setOpen(true);
     };
@@ -162,7 +168,7 @@ const useStyles = makeStyles((theme) => ({
               HeadUp
             </Typography>
             </Container>
-            <Link to="/newproject" className={classes.linkcolor}>
+            {/* <Link to="/newproject" className={classes.linkcolor}>
             <Tooltip title={props.addnew}>
             <IconButton style={{icon: {color: "white"}}}>
               <Badge color="secondary">
@@ -170,9 +176,19 @@ const useStyles = makeStyles((theme) => ({
               </Badge>
             </IconButton>
             </Tooltip>
-               </Link>
+               </Link> */}
             <Tooltip title={props.addnew} onClick={props.newclick}>
-            <IconButton color="inherit">
+            <IconButton 
+            color="inherit"
+            onClick={handleOpenproj}
+            >
+            <Modal
+            open={openproj}
+            onClose={handleCloseproj}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+            className= "modalclass"
+            ><NewProject/></Modal>
               <Badge color="secondary">
                 <AddIcon />
               </Badge>

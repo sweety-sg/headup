@@ -40,7 +40,7 @@ const App = () => {
       <Route exact path="/cardstyle">
         <Cardstyle />
       </Route>
-      <Route exact path="/projects/:projectId" component={ProjectPage} />
+      <Route name="myproject" exact path="/projects/:projectId" component={ProjectPage} />
       
       {/* <Users /> */}
     </div>

@@ -56,22 +56,25 @@ class TeamMembers(models.Model):
 
 class Lists(models.Model):
     # id = models.OneToOneField('Project', models.DO_NOTHING, db_column='id', primary_key=True)
-    id = models.IntegerField(primary_key=True)
+    id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255, blank=True, null=True)
     # project_id = models.IntegerField(db_column='Project_id', blank=True, null=True)  # Field name made lowercase.
     project = models.ForeignKey(to=Project, on_delete=models.CASCADE, related_name='project_l')
-    members = models.ManyToManyField(User, related_name='members')
+    # members = models.ManyToManyField(User, related_name='members')
+    status = models.CharField(max_length=15, blank=True, null=True)
+
 
     # class Meta:
     #     managed = False
         
 
 class Cards(models.Model):
-    id = models.IntegerField(primary_key=True)
+    id = models.AutoField(primary_key=True)
     title = models.CharField(db_column='Title', max_length=255, blank=True, null=True)  # Field name made lowercase.
     description = models.TextField(blank=True, null=True)
     asignees = models.ManyToManyField(User, related_name='cards')
-    list = models.ForeignKey('Lists', models.DO_NOTHING, blank=True, null=True)
+    list = models.ForeignKey('Lists', models.DO_NOTHING, blank=True, null=True,related_name="list")
+    status = models.BooleanField(blank=True, null=True)
     
 
     # class Meta:
@@ -83,7 +86,7 @@ class Comment(models.Model):
     id = models.IntegerField(primary_key=True)
     text = models.TextField(blank=True, null=True)
     comment_by = models.ForeignKey(to=User, null=True, on_delete=models.SET_NULL, related_name='commentor')
-    card = models.ForeignKey(to=Cards,on_delete=models.CASCADE)
+    card = models.ForeignKey(to=Cards,on_delete=models.CASCADE, related_name="card")
     time = models.DateTimeField(default=datetime.now)
 
     class Meta(object):

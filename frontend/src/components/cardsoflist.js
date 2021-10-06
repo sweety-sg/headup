@@ -36,10 +36,10 @@ class CardsofList extends React.Component{
         const cards = this.state.cards
         
         return(
-          <div style={{display:"flex", justifycontent: "space-evenly", flexDirection :"row", flexWrap:'wrap'}}>
+          <div style={{display:"flex", justifycontent: "space-evenly", flexDirection :"row", flexWrap:'wrap', width:"100%"}}>
             {cards.map((card) => (
             <>
-         <div style={{margin: "20", display:"flex", padding:15}}>
+         <div style={{margin: "20", display:"flex", padding:15, width:"100%"}}>
          <Cardstyle title= {card.title}  content={card.description}/>
          <Divider/>
             </div>

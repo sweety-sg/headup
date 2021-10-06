@@ -16,6 +16,9 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import CommentIcon from '@mui/icons-material/Comment';
 import { flexbox } from '@material-ui/system';
+import Popper from '@mui/material/Popper';
+import { Button } from '@mui/material';
+import './style.css';
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -33,15 +36,24 @@ export default function Cardstyle(props) {
 //   onMouseOver = () => this.setState({ shadow: 3 });
 
 //   onMouseOut = () => this.setState({ shadow: 1 });
-
+if(props.type=="project"){
+    const Handledelete= ()=>{
+        // <Deleteproject id={props.id}/>
+    }
+}
   const [expanded, setExpanded] = React.useState(false);
+  const [open, setOpen] = React.useState(false);
+  const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
-  
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+    setOpen((previousOpen) => !previousOpen);
+  };
   return (
-    <Card sx={{ maxWidth: 345 }} style= {{display:"flex", flexDirection: "column", justifyContent: "space-between"}}>
+    <Card sx={{ maxWidth: 345 }} style= {{display:"flex", flexDirection: "column", justifyContent: "space-between", width:"100%"}}>
       <CardHeader
         // avatar={
         //   <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
@@ -49,8 +61,18 @@ export default function Cardstyle(props) {
         //   </Avatar>
         // }
         action={
-          <IconButton aria-label="settings" >
-            <MoreVertIcon />
+          <IconButton
+           aria-label="settings" 
+            
+           >
+            <MoreVertIcon onClick={handleClick}/>
+            <Popper  open={open} anchorEl={anchorEl}>
+            <div className="columnflex border">
+            <Button variant="text">Edit</Button>
+            <Button variant="text">Delete</Button>
+            </div>
+            </Popper>
+            
           </IconButton>
         }
         title={props.title}
@@ -71,7 +93,10 @@ export default function Cardstyle(props) {
         {/* <IconButton aria-label="add to favorites">
           <FavoriteIcon />
         </IconButton> */}
-        <IconButton aria-label="comment">
+        <IconButton 
+        aria-label="comment"
+
+        >
           <CommentIcon />
         </IconButton>
         {/* <ExpandMore

@@ -28,7 +28,15 @@ import Data from './data';
 import Project from './components/project';
 import AddIcon from '@mui/icons-material/Add';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+// import { useHistory } from "react-router-dom";
 // import white from "material-ui/core/colors/white";
+
+// const history = useHistory();
+
+// const routeChange = () =>{ 
+//   let path = `newPath`; 
+//   history.push(path);
+// }
 
 function Copyright() {
     return (
@@ -181,7 +189,7 @@ export default function Dashboard(props) {
               HeadUp
             </Typography>
             </Container>
-            <Link to="/newproject" className={classes.linkcolor}>
+            <Link to="/newproject" className={classes.linkcolor} style={{ textDecoration: 'none', color: 'white' }}>
             <Tooltip title="Add new project">
             <IconButton style={{icon: {color: "white"}}}>
               <Badge color="secondary">

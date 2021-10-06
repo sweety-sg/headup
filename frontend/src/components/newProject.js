@@ -16,6 +16,7 @@ import { Paper } from "@material-ui/core";
 import Cookies from 'js-cookie';
 import Datetime from 'react-datetime';
 import { Editor } from '@tinymce/tinymce-react';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 // import AdapterDateFns from '@mui/lab/AdapterDateFns';
 // import LocalizationProvider from '@mui/lab/LocalizationProvider';
 
@@ -24,6 +25,7 @@ import "./components.css";
 const NewProject = (props)=> {
     const [formData, setFormData] = React.useState({
         name: "",
+        
       });
     var today = new Date(),
     date = today.getDate() + '-' + (today.getMonth() + 1) + '-' + today.getFullYear()+ ' ' + today.getHours() + ':' + today.getMinutes();
@@ -46,9 +48,9 @@ const NewProject = (props)=> {
         }));
       };
 
-    // const handleStatusChange = (event, data) => {
-    //     setStatus(event.target.value);   
-    // }
+    const handleStatusChange = (event, data) => {
+        setStatus(event.target.value);   
+    }
 
     const handleMembersChange = (e) => {
         setMembers(e.target.value);
@@ -146,7 +148,9 @@ const NewProject = (props)=> {
     return(
         
         <Container component="main" maxWidth="xs" >
+        <HighlightOffIcon style={{ position: "absolute" , right: "40px", top:"10px"}}/>
             <div style={{ margin: "10px 5px" , padding: "10px 5px"}}>
+            
             {/* <Paper className=".MuiPaper-outlined" sx={{ width: 10 }}> */}
                 <form onSubmit={handleFormSubmit} noValidate>
                 <Grid container spacing={2}>
@@ -291,7 +295,7 @@ const NewProject = (props)=> {
                 id="single-select-outlined"
                 style={props.borderClass}
                 value={status}
-                onChange={handleFormChange}
+                onChange={handleStatusChange}
                 label="Status"
                 name="status"
               >
@@ -316,7 +320,7 @@ const NewProject = (props)=> {
               type="submit"
               fullWidth
               variant="contained"
-              style={{ marginTop: "15px", background: "#E66800", color:"white" }}
+              style={{ marginTop: "15px", background: "#336EF1", color:"white" }}
               sx = {{width: "100%", color: 'success',}}
             >
               Create Project

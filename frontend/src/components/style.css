@@ -12,3 +12,28 @@
     padding: 0.5rem;
     /* color: #336EF1; */
 }
+.modalclass{
+    background: white;
+    opacity: 1;
+    width: 500px;
+    padding: 2rem;
+    position: absolute;
+    margin: auto;
+    border: 2px solid #e6e6e6;
+    overflow: scroll;
+    max-height: 100%;
+    /* "#E66800" */
+    /* color: white; */
+}
+.cardclass{
+    /* background:#e6e6e6; */
+}
+.columnflex{
+    display:flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background:white;
+}
+.border{
+    border: 0.5px solid #e6e6e6;
+}

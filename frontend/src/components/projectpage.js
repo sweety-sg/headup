@@ -42,6 +42,13 @@ import CommentIcon from '@mui/icons-material/Comment';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import CardContent from '@mui/material/CardContent';
 import CardsofList from './cardsoflist';
+import Popper from '@mui/material/Popper';
+import Addcard from './addcard';
+import { borders } from '@mui/system';
+import { palette } from '@mui/system';
+import Modal from '@mui/material/Modal';
+import Addlist from './addlist';
+import './style.css'
 
 
 
@@ -74,6 +81,14 @@ const ProjectPage=(props) =>{
   var [currentCards, setCurrentCards] = React.useState([]);
   const [allLists, setallLists] = React.useState([]);
   const [allCards, setallCards] = React.useState([]);
+  const [open, setOpen] = React.useState(false);
+  const [openlist, setOpenlist] = React.useState(false);
+  const [openproj, setOpenproj] = React.useState(false);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const handleOpen = () => setOpenlist(true);
+  const handleClose = () => setOpenlist(false);
+  const handleOpenproj = () => setOpenproj(true);
+  const handleCloseproj = () => setOpenproj(false);
 
   async function fetchUsers() {
     axios
@@ -145,12 +160,15 @@ axios
 //         </>
 //     ))};
 // }
-
+const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+    setOpen((previousOpen) => !previousOpen);
+  };
 return(
     // "hello"
     <>
     
-    <MyAppBar addnew="Add new list"/>
+    <MyAppBar addnew="Add new project"/>
 
     <div style={{marginTop:"50px", padding:"2rem"}}>
     <div className="columnflex">
@@ -160,16 +178,27 @@ return(
     <Button variant="contained" style={{marginLeft:"2rem", padding:"12px", height:"60%"}} endIcon={<VisibilityIcon/>} flexWrap>
     Visibility
     </Button>
+    <Button onClick={handleOpen} endIcon={<AddIcon/>} style={{justifySelf:"flex-end", position:"absolute", right:"2rem"}}>Add List</Button>
+    <Modal
+        open={openlist}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+        className= "modalclass"
+        style={{height:"250px"}}
+      >
+          <Addlist projectId={projectId} />
+      </Modal>
     </div>
     
     <Divider/>
-    <div style={{display:"flex", justifycontent: "space-evenly", flexDirection :"row", flexWrap:'wrap'}}>
+    <div style={{display:"flex", justifycontent: "flex-start", flexDirection :"row", flexWrap:'wrap' , alignContent:"flex-start"}}>
                 {lists.map((list) => (
                   <>
                     {/* {fetchCards.call(this,list)} */}
                    
-                     <div style={{margin: "20", display:"flex", padding:15}}>
-                     <Card sx={{ maxWidth: 345 }} style= {{display:"flex", flexDirection: "column", justifyContent: "space-between"}}>
+                     <div style={{margin: "20", display:"flex", padding:15, height:"auto"}}>
+                     <Card sx={{ width: 345 ,height: "auto"}} style= {{display:"flex", flexDirection: "column", height:"auto", alignSelf:"flex-start", maxHeight: "1000px", overflow:"scroll"}} className="cardclass">
                         <CardHeader
                         avatar={
                         <Avatar sx={{ bgcolor: "#336EF1" }}>
@@ -185,8 +214,16 @@ return(
                         // subheader={props.subtitle}
                     />
                     
-                        <CardsofList listId={list.id} projectId= {projectId}/>
-                    
+                        <CardsofList listId={list.id} projectId= {projectId} style={{width:"100%"}}/>
+                        <Button aria-describedby={list.id} variant="outlined" startIcon= {<AddIcon/>} onClick={handleClick} style={{margin: 15}}>
+                        Add Card
+                        </Button>
+
+                        <Popper id={list.id} open={open} anchorEl={anchorEl}>
+                        <Box sx={{ border: 1, p: 1, bgcolor: 'background.paper' ,borderColor:'primary.main'}}>
+                            <Addcard list={list} projectId={projectId}/>
+                        </Box>
+                        </Popper>
                          </Card>
                    </div>
                    </>
