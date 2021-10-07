@@ -59,6 +59,7 @@ class Project extends React.Component {
   //   // setOpen((previousOpen) => !previousOpen);
   //   this.state.open = !(this.state.open);
   // };
+  
     renderItems = () => {
             const newItems = this.state.projects
             var data={
@@ -68,9 +69,26 @@ class Project extends React.Component {
               <div style={{display:"flex", justifycontent: "space-evenly", flexDirection :"row", flexWrap:'wrap'}}>
                 {newItems.map((project) => (
                   <>
-                    
+                    {/* {
+                      (()=> {
+                        var color = (project.status =="To be started") ?"red": (project.status =="In-Progress"?"yellow" : (project.status =="Completed" ? "green"))
+                        
+                      })()
+                    } */}
                      <div style={{margin: "20", display:"flex", padding:15}}>
-                     <Cardstyle title= {project.name} subtitle={project.status} content={project.wiki}  />
+                     
+                    
+                     <Cardstyle
+                      title= {project.name}
+                       subtitle={project.status} 
+                       content={project.wiki} 
+                       id={project.id} 
+                       type="project" 
+                       link={`projects/${project.id}`} 
+                       status={project.status}
+                       comp = {project}
+                       />
+                     {/* </Link> */}
                      
                      <Divider/>
                    </div>

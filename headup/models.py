@@ -73,7 +73,7 @@ class Cards(models.Model):
     title = models.CharField(db_column='Title', max_length=255, blank=True, null=True)  # Field name made lowercase.
     description = models.TextField(blank=True, null=True)
     asignees = models.ManyToManyField(User, related_name='cards')
-    list = models.ForeignKey('Lists', models.DO_NOTHING, blank=True, null=True,related_name="list")
+    list = models.ForeignKey('Lists',on_delete=models.CASCADE, blank=True, null=True,related_name="list")
     status = models.BooleanField(blank=True, null=True)
     
 

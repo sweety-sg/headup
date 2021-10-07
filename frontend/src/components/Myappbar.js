@@ -32,6 +32,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import Modal from '@mui/material/Modal';
 import NewProject from './newProject';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import './style.css'
 const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
@@ -177,23 +178,30 @@ const useStyles = makeStyles((theme) => ({
             </IconButton>
             </Tooltip>
                </Link> */}
-            <Tooltip title={props.addnew} onClick={props.newclick}>
+           <Tooltip title="Add new project">
             <IconButton 
             color="inherit"
             onClick={handleOpenproj}
             >
+            <Badge color="secondary">
+                <AddIcon />
+              </Badge>
+              </IconButton>
+            </Tooltip>
+            
+
             <Modal
             open={openproj}
             onClose={handleCloseproj}
             aria-labelledby="modal-modal-title"
             aria-describedby="modal-modal-description"
             className= "modalclass"
-            ><NewProject/></Modal>
-              <Badge color="secondary">
-                <AddIcon />
-              </Badge>
-            </IconButton>
-            </Tooltip>
+            >
+            <div>
+            <HighlightOffIcon style={{ position: "absolute" , right: "40px", top:"10px"}} onClick={handleCloseproj}/>
+            <NewProject/>
+            </div></Modal>
+                 
             <IconButton color="inherit">
               <Badge badgeContent={4} color="secondary">
                 <NotificationsIcon />

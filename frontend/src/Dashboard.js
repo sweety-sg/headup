@@ -1,6 +1,6 @@
 import React from 'react';
 import clsx from 'clsx';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles , createTheme} from '@material-ui/core/styles';
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom"; 
 import LinkWrapper from "./components/linkwrapper";
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -28,6 +28,12 @@ import Data from './data';
 import Project from './components/project';
 import AddIcon from '@mui/icons-material/Add';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import MyAppBar from './components/Myappbar'
+import Modal from '@mui/material/Modal';
+import NewProject from './components/newProject';
+import './components/style.css'
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import { Fab } from '@mui/material';
 // import { useHistory } from "react-router-dom";
 // import white from "material-ui/core/colors/white";
 
@@ -37,13 +43,30 @@ import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 //   let path = `newPath`; 
 //   history.push(path);
 // }
+const themeLight = createTheme({
+  palette: {
+    background: {
+      default: "#e4f0e2"
+    }
+  }
+});
 
+const themeDark = createTheme({
+  palette: {
+    background: {
+      default: "#222222"
+    },
+    text: {
+      primary: "#ffffff"
+    }
+  }
+});
 function Copyright() {
     return (
       <Typography variant="body2" color="textSecondary" align="center">
         {'Copyright © '}
         <Link color="inherit" href="https://material-ui.com/">
-          Your Website
+          HeadUp
         </Link>{' '}
         {new Date().getFullYear()}
         {'.'}
@@ -75,6 +98,7 @@ const useStyles = makeStyles((theme) => ({
       transition: theme.transitions.create(['width', 'margin'], {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen,
+        background: '#ffffff'
       }),
     },
     appBarShift: {
@@ -150,8 +174,12 @@ const useStyles = makeStyles((theme) => ({
   }));
   
 export default function Dashboard(props) {
+    const [light, setLight] = React.useState(true);
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
+    const [openproj, setOpenproj] = React.useState(false);
+    const handleOpenproj = () => setOpenproj(true);
+    const handleCloseproj = () => setOpenproj(false);
     const handleDrawerOpen = () => {
       setOpen(true);
     };
@@ -189,8 +217,8 @@ export default function Dashboard(props) {
               HeadUp
             </Typography>
             </Container>
-            <Link to="/newproject" className={classes.linkcolor} style={{ textDecoration: 'none', color: 'white' }}>
-            <Tooltip title="Add new project">
+            {/* <Link to="/newproject" className={classes.linkcolor} style={{ textDecoration: 'none', color: 'white' }}> */}
+            {/* <Tooltip title="Add new project">
             <IconButton style={{icon: {color: "white"}}}>
               <Badge color="secondary">
                 <AddIcon />
@@ -204,7 +232,34 @@ export default function Dashboard(props) {
                 <AddIcon />
               </Badge>
             </IconButton>
+            </Tooltip> */}
+
+            <Tooltip title="Add new project">
+            <IconButton 
+            color="inherit"
+            onClick={handleOpenproj}
+            >
+            <Badge color="secondary">
+                <AddIcon />
+              </Badge>
+              </IconButton>
             </Tooltip>
+            
+
+            <Modal
+            open={openproj}
+            onClose={handleCloseproj}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+            className= "modalclass"
+            >
+            <div>
+            <HighlightOffIcon style={{ position: "absolute" , right: "40px", top:"10px"}} onClick={handleCloseproj}/>
+            <NewProject/>
+            </div></Modal>
+
+              
+
             <IconButton color="inherit">
               <Badge badgeContent={4} color="secondary">
                 <NotificationsIcon />
@@ -212,6 +267,7 @@ export default function Dashboard(props) {
             </IconButton>
           </Toolbar>
         </AppBar>
+        {/* <MyAppBar title="Dashboard"/> */}
         <Drawer
           variant="permanent"
           classes={{
@@ -236,11 +292,16 @@ export default function Dashboard(props) {
           <Project />
             <Typography variant="h6">  Your Cards </Typography>
             <Data />
+            <Fab color="primary" aria-label="add" className="fixedfab" onClick={handleOpenproj}>
+              <AddIcon />
+            </Fab>
             <Divider />
+            
             <Box pt={4}>
               <Copyright />
+              
             </Box>
-            {/* {props.containerElement} */}
+            
           </Container>
         </main>
       </div>

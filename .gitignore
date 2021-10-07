@@ -1,6 +1,7 @@
 pyvenv.cfg
 lib
 node_modules
+.DS_Store
 # Django #
 *.log
 *.pot

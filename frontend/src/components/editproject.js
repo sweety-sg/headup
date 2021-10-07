@@ -22,7 +22,7 @@ const EditProject= (props) =>{
       });
     
     var project = props.data
-    var projectId = project.project.id
+    var projectId = project.id
     console.log(projectId)
     console.log(project)
     const [wiki, setWiki] = React.useState("");
@@ -70,7 +70,9 @@ const EditProject= (props) =>{
         fetchUsers();
 
     }, []);
-
+     const handleStatusChange = (event, data) => {
+        setStatus(event.target.value);   
+    }
     const handleMembersChange = (e) => {
         setMembers(e.target.value);
         console.log(members)
@@ -130,8 +132,8 @@ const EditProject= (props) =>{
             })
             .then((response)=>{
                 console.log(response);
+                window.location.reload();
                 console.log("updated");
-                emptylist();
                 // props.refreshProjectList(true);
             })
             .catch((err) => {
@@ -288,7 +290,7 @@ const EditProject= (props) =>{
                 id="single-select-outlined"
                 style={props.borderClass}
                 value={status}
-                onChange={handleFormChange}
+                onChange={handleStatusChange}
                 label="Status"
                 name="status"
               >
@@ -313,7 +315,7 @@ const EditProject= (props) =>{
               type="submit"
               fullWidth
               variant="contained"
-              style={{ marginTop: "15px", background: "#E66800", color:"white" }}
+              style={{ marginTop: "15px", background: "#336EF1", color:"white" }}
               sx = {{width: "100%", color: 'success',}}
             >
               Update Project

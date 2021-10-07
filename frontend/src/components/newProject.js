@@ -125,6 +125,7 @@ const NewProject = (props)=> {
           .then((res) => {
             console.log(res);
             console.log("posted form");
+            window.location.reload();
           })
           .catch((err) => {
             console.log(err);
@@ -148,7 +149,7 @@ const NewProject = (props)=> {
     return(
         
         <Container component="main" maxWidth="xs" >
-        <HighlightOffIcon style={{ position: "absolute" , right: "40px", top:"10px"}}/>
+        
             <div style={{ margin: "10px 5px" , padding: "10px 5px"}}>
             
             {/* <Paper className=".MuiPaper-outlined" sx={{ width: 10 }}> */}

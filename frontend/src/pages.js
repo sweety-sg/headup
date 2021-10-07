@@ -35,16 +35,19 @@ export const mainListItems = (
     <ListItem button>
     <Tooltip title="Boards" enterDelay={200} leaveDelay={100} placement="right">
     <ListItemIcon>
-        <LayersIcon containerElement={<Link href="http://127.0.0.1:3000/dashboard"/>}/>           
+        <LayersIcon onClick={() => window.open('http://127.0.0.1:3000/dashboard')}/>           
       </ListItemIcon>
       
         </Tooltip>
         <ListItemText primary="All Boards" />
     </ListItem>
     <ListItem button>
+    <Tooltip title="Users" enterDelay={200} leaveDelay={100} placement="right">
       <ListItemIcon>
         <PeopleIcon />
       </ListItemIcon>
+      
+      </Tooltip>
       <ListItemText primary="Your Account" />
     </ListItem>  
   </div>

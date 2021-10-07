@@ -171,7 +171,7 @@ return(
     <MyAppBar addnew="Add new project"/>
 
     <div style={{marginTop:"50px", padding:"2rem"}}>
-    <div className="columnflex">
+    <div className="columnflexx">
     <Typography variant="h4" className="font-head">
         {project.name}
     </Typography>
@@ -192,7 +192,7 @@ return(
     </div>
     
     <Divider/>
-    <div style={{display:"flex", justifycontent: "flex-start", flexDirection :"row", flexWrap:'wrap' , alignContent:"flex-start"}}>
+    <div style={{display:"flex", justifycontent: "flex-start", flexDirection :"row", flexWrap:'wrap' , alignContent:"flex-start"}} className="font-body">
                 {lists.map((list) => (
                   <>
                     {/* {fetchCards.call(this,list)} */}
@@ -206,9 +206,14 @@ return(
                           </Avatar>
                         }
                         action={
+                            <div>
                         <IconButton aria-label="settings" >
                             <MoreVertIcon />
                         </IconButton>
+                        <IconButton aria-label="settings" >
+                            <MoreVertIcon />
+                        </IconButton>
+                        </div>
                         }
                         title={list.name}
                         // subheader={props.subtitle}

@@ -51,7 +51,7 @@ class Data extends React.Component {
               <div style={{display:"flex", justifycontent: "space-evenly", flexDirection :"row", flexWrap:'wrap'}}>
                 {newItems.map((card) => (
                      <div style={{margin: "20", display:"flex", padding:15}}>
-                     <Cardstyle title= {card.title} subtitle={card.list} content={card.description}/>
+                     <Cardstyle title= {card.title} subtitle={card.list} content={card.description} type="card" status={card.status}/>
                      <Divider/>
                    </div>
                     ))}

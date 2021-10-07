@@ -40,7 +40,7 @@ class CardsofList extends React.Component{
             {cards.map((card) => (
             <>
          <div style={{margin: "20", display:"flex", padding:15, width:"100%"}}>
-         <Cardstyle title= {card.title}  content={card.description}/>
+         <Cardstyle title= {card.title}  content={card.description} type="card" id={card.id}/>
          <Divider/>
             </div>
             </>

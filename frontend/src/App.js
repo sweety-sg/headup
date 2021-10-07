@@ -26,7 +26,6 @@ const App = () => {
       </Route>
       <Route exact path="/dashboard">
         <Dashboard title = "Dashboard"/>
-        <Data />
       </Route>
       <Route exact path="/projects">
         <Project />
