@@ -150,6 +150,14 @@ class ProjectViewSet(viewsets.ModelViewSet):
                     )
             return Response('Please enter a name', status=status.HTTP_400_BAD_REQUEST)
 
+    @action(methods=['GET'], detail = False, url_path='lists',url_name='project-lists')
+    def project_lists(self,request):
+        if(request.user.is_authenticated and not (request.user.disabled)):
+            serializer = ProjectSerializer(request.user.projects.all(), many = True)
+            return Response(serializer.data)
+        else:
+            return HttpResponseForbidden()
+
     # def proj_update(self, serializer):
     #     user_obj = self.request.user
     #     if user_obj.is_admin:

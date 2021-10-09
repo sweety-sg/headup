@@ -10,7 +10,7 @@ import BarChartIcon from '@material-ui/icons/BarChart';
 import LayersIcon from '@material-ui/icons/Layers';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import { Tooltip } from '@material-ui/core';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 
 export const mainListItems = (
   <div>
@@ -23,33 +23,41 @@ export const mainListItems = (
       </ListItemIcon>
       <ListItemText primary="Dashboard" />
     </ListItem> */}
-    <ListItem button>
+    <Link to="/dashboard" style={{textDecoration:"none"}}>
+    <ListItem button >
     <Tooltip title="Dashboard" enterDelay={200} leaveDelay={100} placement="right">
     <ListItemIcon>
-        <DashboardIcon onClick={() => window.open('http://127.0.0.1:3000/dashboard')}/>           
+        <DashboardIcon/>           
       </ListItemIcon>
       
         </Tooltip>
-        <ListItemText primary="Dashboard" />
+        <ListItemText primary="Dashboard" style={{color: "#000"}}/>
     </ListItem>
-    <ListItem button>
+    </Link>
+
+    <Link to="/dashboard" style={{textDecoration:"none"}}>
+    <ListItem button as={NavLink} to="http://127.0.0.1:3000/dashboard">
     <Tooltip title="Boards" enterDelay={200} leaveDelay={100} placement="right">
     <ListItemIcon>
-        <LayersIcon onClick={() => window.open('http://127.0.0.1:3000/dashboard')}/>           
+        <LayersIcon/>           
       </ListItemIcon>
       
         </Tooltip>
-        <ListItemText primary="All Boards" />
+        <ListItemText primary="All Boards" style={{color: "#000"}} />
     </ListItem>
-    <ListItem button>
+    </Link>
+
+    <Link to="/users" style={{textDecoration:"none"}}>
+    <ListItem button  as={NavLink} to="/users">
     <Tooltip title="Users" enterDelay={200} leaveDelay={100} placement="right">
       <ListItemIcon>
         <PeopleIcon />
       </ListItemIcon>
       
       </Tooltip>
-      <ListItemText primary="Your Account" />
+      <ListItemText primary="Users" style={{color: "#000"}}/>
     </ListItem>  
+    </Link>
   </div>
 );
 

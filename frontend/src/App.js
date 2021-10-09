@@ -1,6 +1,5 @@
 import logo from './logo.svg';
 import './App.css';
-import Users from './components/users/users'
 // import axios from '../../axios'
 import Dashboard from './Dashboard';
 import Data from './data.js';
@@ -13,6 +12,9 @@ import NewProject from './components/newProject';
 import  Cardstyle from './components/Cardstyle';
 import EditProject from './components/editproject';
 import ProjectPage from './components/projectpage';
+import CurrentUser from "./components/currentuser";
+import Users from "./components/users";
+// import Projects from './components/allprojects';
 
 const App = () => {
   return (
@@ -27,9 +29,12 @@ const App = () => {
       <Route exact path="/dashboard">
         <Dashboard title = "Dashboard"/>
       </Route>
-      <Route exact path="/projects">
+      <Route exact path="/myprojects">
         <Project />
       </Route>
+      {/* <Route exact path="/projects">
+        <Projects />
+      </Route> */}
       <Route exact path="/newproject">
         <NewProject />
       </Route>
@@ -40,7 +45,9 @@ const App = () => {
         <Cardstyle />
       </Route>
       <Route name="myproject" exact path="/projects/:projectId" component={ProjectPage} />
-      
+      <Route exact path="/users">
+        <Users />
+      </Route>      
       {/* <Users /> */}
     </div>
     

@@ -17,9 +17,7 @@ import Datetime from 'react-datetime';
 // import { connect } from "react-redux";
 
 const EditProject= (props) =>{
-    const [formData, setFormData] = React.useState({
-        name: "",
-      });
+    
     
     var project = props.data
     var projectId = project.id
@@ -91,6 +89,7 @@ const EditProject= (props) =>{
 
     async function oldValues(){
         setFormData(project.name);
+       
         setStart_date(project.start_date);
         setWhen(project.when);
         setMembers(project.members);
@@ -100,6 +99,9 @@ const EditProject= (props) =>{
         // setUsers(allUsers);
         
     }
+    const [formData, setFormData] = React.useState({
+        name: project.name,
+      });
     function emptylist(){
 
     }

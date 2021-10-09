@@ -19,13 +19,13 @@ import { flexbox } from '@material-ui/system';
 import Popper from '@mui/material/Popper';
 import { Button } from '@mui/material';
 import './style.css';
-import DeleteProject from './deleteproject';
 import axios from "axios";
 import Cookies from 'js-cookie';
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom"; 
 import EditProject from "./editproject";
 import Modal from '@mui/material/Modal';
 import './style.css'
+import EditCard from './editcard'
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -41,11 +41,16 @@ const ExpandMore = styled((props) => {
 export default function Cardstyle(props) {
     var color="";
     var boxshadow="";
+    var display="block";
     
     const [openproj, setOpenproj] = React.useState(false);
+    const [opencard, setOpencard] = React.useState(false);
     const [proj, setProj] = React.useState({});
+    const [card, setCard] = React.useState({});
+    // const [display, setDisplay] = React.useState("block")
     // const handleOpenproj = () => setOpenproj(true);
     const handleCloseproj = () => setOpenproj(false);
+    const handleClosecard = () => setOpencard(false);
  const handleDelete= ()=>{
      if(props.type=="project"){
          console.log("hiii there");
@@ -58,14 +63,21 @@ export default function Cardstyle(props) {
  }
  const handleEdit=()=>{
      if(props.type=="project"){
-         setProj(props.comp)
+         display= "none";
          console.log(proj+"hemlo")
          console.log(proj.id)
          setOpenproj(true);
          setOpen((previousOpen) => !previousOpen);
      }
+     if(props.type=="card"){
+         setCard(props.comp)
+         console.log(card+"hemlo")
+         setOpencard(true);
+         setOpen((previousOpen) => !previousOpen);
+     }
  }
  if(props.type=="project"){
+     display= "none"
      switch (props.status) {
          case "To be started":
              color= ("#FF0000")
@@ -141,13 +153,17 @@ function handleDeleteEventC(id) {
   return {__html: props.content};
 }
   return (
-    <Card sx={{ maxWidth: 345 }} style= {{display:"flex", flexDirection: "column", justifyContent: "space-between", width:"100%", borderBottom:"3px solid #FEDE00", borderColor:color , boxShadow:boxshadow }} className="popeffect">
+    <Card sx={{ maxWidth: 345 }} 
+    style= {{display:"flex", 
+    flexDirection: "column", 
+    justifyContent: "space-between", 
+    width:"100%", 
+    borderBottom:"3px solid #FEDE00", 
+    borderColor:color , 
+    boxShadow:boxshadow 
+    }} className="popeffect">
       <CardHeader
-        // avatar={
-        //   <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-        //     R
-        //   </Avatar>
-        // }
+
         action={
           <IconButton
            aria-label="settings" 
@@ -163,6 +179,7 @@ function handleDeleteEventC(id) {
             
           </IconButton>
         }
+       
         title={props.title}
         subheader={props.subtitle}
       />
@@ -174,6 +191,15 @@ function handleDeleteEventC(id) {
             className= "modalclass"
             >
             <EditProject data = {proj}/>
+            </Modal>
+        <Modal
+            open={opencard}
+            onClose={handleClosecard}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+            className= "modalclass"
+            >
+            <EditCard card= {card} projectId={props.projectId}/>
             </Modal>
       {/* <CardMedia
         component="img"
@@ -196,7 +222,7 @@ function handleDeleteEventC(id) {
         aria-label="comment"
 
         >
-          <CommentIcon />
+          <CommentIcon style={{display: display}}/>
         </IconButton>
         {/* <ExpandMore
           expand={expanded}

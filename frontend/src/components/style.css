@@ -40,9 +40,10 @@
     /* color: #336EF1; */
     /* rgb(65,83,175) */
     /* #4153af */
+    /* color: rgb(255,255,255) */
 }
 .appbar{
-    background:#ffffff;
+    background:rgb(255,255,255);
 }
 .popeffect:hover{
     transform: translate(0, -5px);
@@ -53,4 +54,13 @@
     right:50px;
     bottom:50px;
     /* color: #336EF1; */
+}
+.color-green{
+
+}
+.color-red{
+
+}
+.user-cards{
+    width: 300px !important;
 }

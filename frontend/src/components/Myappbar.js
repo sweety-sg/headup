@@ -33,6 +33,7 @@ import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import Modal from '@mui/material/Modal';
 import NewProject from './newProject';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import { NavLink } from 'react-router-dom';
 import './style.css'
 const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
@@ -154,9 +155,12 @@ const useStyles = makeStyles((theme) => ({
             >
               <MenuIcon />
             </IconButton>
-            <IconButton>
-            <HomeIcon style= {{marginLeft : 0 , marginRight : 4 ,color: 'white'}} onClick={() => window.open('http://127.0.0.1:3000/dashboard')}/>
+            <Link to="/dashboard" style={{textDecoration:"none"}}>
+            <IconButton >
+            <HomeIcon style= {{marginLeft : 0 , marginRight : 4 ,color: 'white'}} />
             </IconButton>
+            </Link>
+
             <Typography component="h1" variant="h6" color="inherit" style={{display:'inline'}}>
               {props.title}
             </Typography>
@@ -169,15 +173,7 @@ const useStyles = makeStyles((theme) => ({
               HeadUp
             </Typography>
             </Container>
-            {/* <Link to="/newproject" className={classes.linkcolor}>
-            <Tooltip title={props.addnew}>
-            <IconButton style={{icon: {color: "white"}}}>
-              <Badge color="secondary">
-                <AddIcon />
-              </Badge>
-            </IconButton>
-            </Tooltip>
-               </Link> */}
+    
            <Tooltip title="Add new project">
             <IconButton 
             color="inherit"
@@ -209,6 +205,23 @@ const useStyles = makeStyles((theme) => ({
             </IconButton>
           </Toolbar>
         </AppBar>
+        <Drawer
+          variant="permanent"
+          classes={{
+            paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
+          }}
+          open={open}
+        >
+          <div className={classes.toolbarIcon}>
+            <IconButton onClick={handleDrawerClose}>
+              <ChevronLeftIcon />
+            </IconButton>
+          </div>
+          <Divider />
+          <List>{mainListItems}</List>
+          <Divider />
+          <List>{secondaryListItems}</List>
+        </Drawer>
         </div>
     )
   }

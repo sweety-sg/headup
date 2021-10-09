@@ -117,6 +117,7 @@ const NewProject = (props)=> {
             status : status,
             members : members,
             project_admins : project_admins,
+            // creator: request.user
         }
         axios
           .post("http://127.0.0.1:3000/headup/project/", data, {

@@ -6,7 +6,7 @@ from datetime import datetime
 # from django.contrib.auth.models import User
 
 
-# Create your models here.
+# Create your models here.hh
 from django.db import models
 
 class User(AbstractUser):
@@ -38,8 +38,7 @@ class Project(models.Model):
 
     
     # class Meta:
-    #     managed = False
-    #     # db_table = 'Project'
+    #     ordering = ['-id']
 
 class TeamMembers(models.Model):
     member = models.ForeignKey(to=User, on_delete=models.SET_NULL, null=True, related_name='team_member')

@@ -34,6 +34,7 @@ import NewProject from './components/newProject';
 import './components/style.css'
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import { Fab } from '@mui/material';
+import { NavLink } from 'react-router-dom';
 // import { useHistory } from "react-router-dom";
 // import white from "material-ui/core/colors/white";
 
@@ -41,7 +42,7 @@ import { Fab } from '@mui/material';
 
 // const routeChange = () =>{ 
 //   let path = `newPath`; 
-//   history.push(path);
+//   history.push(path);l
 // }
 const themeLight = createTheme({
   palette: {
@@ -65,7 +66,7 @@ function Copyright() {
     return (
       <Typography variant="body2" color="textSecondary" align="center">
         {'Copyright © '}
-        <Link color="inherit" href="https://material-ui.com/">
+        <Link color="inherit" href="http://127.0.0.1:3000/dashboard">
           HeadUp
         </Link>{' '}
         {new Date().getFullYear()}
@@ -202,9 +203,15 @@ export default function Dashboard(props) {
             >
               <MenuIcon />
             </IconButton>
-            <IconButton>
-            <HomeIcon style= {{marginLeft : 0 , marginRight : 4 ,color: 'white'}} onClick={() => window.open('http://127.0.0.1:3000/dashboard')}/>
+            <Link to="/dashboard" style={{textDecoration:"none"}}>
+            <IconButton
+            //  onClick={() => window.open('http://127.0.0.1:3000/dashboard')}
+             >
+            <HomeIcon style= {{marginLeft : 0 , marginRight : 4 ,color: 'white'}} 
+            
+            />
             </IconButton>
+            </Link>
             <Typography component="h1" variant="h6" color="inherit" style={{display:'inline'}}>
               {props.title}
             </Typography>

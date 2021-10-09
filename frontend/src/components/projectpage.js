@@ -48,7 +48,13 @@ import { borders } from '@mui/system';
 import { palette } from '@mui/system';
 import Modal from '@mui/material/Modal';
 import Addlist from './addlist';
-import './style.css'
+import './style.css';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
+import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import Editlist from './editlist';
 
 
 
@@ -83,31 +89,18 @@ const ProjectPage=(props) =>{
   const [allCards, setallCards] = React.useState([]);
   const [open, setOpen] = React.useState(false);
   const [openlist, setOpenlist] = React.useState(false);
+  const [openeditlist, setOpeneditlist] = React.useState(false);
   const [openproj, setOpenproj] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const handleOpen = () => setOpenlist(true);
   const handleClose = () => setOpenlist(false);
   const handleOpenproj = () => setOpenproj(true);
   const handleCloseproj = () => setOpenproj(false);
-
-  async function fetchUsers() {
-    axios
-        .get('http://127.0.0.1:3000/headup/user/')
-        .then((response) => {
-            console.log("entered");
-            console.log(response.data.results);
-            setUsers(response.data.results);
-            console.log("fetched users");
-        })
-        .catch((error) => console.log(error + "uff"));
-}
+    const handleOpeneditlist = () => {setOpeneditlist(true)};
+  const handleCloseeditlist = () => setOpeneditlist(false);
+  var lis = {}
 
 React.useEffect(() => {
-    // fetchCurrUserInfo();
-
-    // setAlert({
-    //   open: false,
-    // });
 axios
 .get("http://127.0.0.1:3000/headup/project/"+projectId+"/")
 .then((res) => {
@@ -166,7 +159,7 @@ const handleClick = (event) => {
   };
 return(
     // "hello"
-    <>
+    <div style={{display:"flex"}}>
     
     <MyAppBar addnew="Add new project"/>
 
@@ -192,13 +185,16 @@ return(
     </div>
     
     <Divider/>
-    <div style={{display:"flex", justifycontent: "flex-start", flexDirection :"row", flexWrap:'wrap' , alignContent:"flex-start"}} className="font-body">
+    {/* <ListofProject projectId= {projectId} lists={lists}/> */}
+   
+    <div style={{display:"flex", flexDirection :"row", flexWrap:'wrap' }} className="font-body">
                 {lists.map((list) => (
                   <>
+                  
                     {/* {fetchCards.call(this,list)} */}
                    
-                     <div style={{margin: "20", display:"flex", padding:15, height:"auto"}}>
-                     <Card sx={{ width: 345 ,height: "auto"}} style= {{display:"flex", flexDirection: "column", height:"auto", alignSelf:"flex-start", maxHeight: "1000px", overflow:"scroll"}} className="cardclass">
+                     {/* <div style={{margin: "20", display:"flex", padding:15, height:"auto"}}>
+                     <Card sx={{ width: 345 ,height: "auto"}} style= {{display:"flex", flexDirection: "column",  alignSelf:"flex-start", maxHeight: "1200px", overflow:"scroll"}} >
                         <CardHeader
                         avatar={
                         <Avatar sx={{ bgcolor: "#336EF1" }}>
@@ -207,18 +203,28 @@ return(
                         }
                         action={
                             <div>
-                        <IconButton aria-label="settings" >
-                            <MoreVertIcon />
+                        <IconButton aria-label="settings" onClick={handleOpeneditlist} >
+                            <EditOutlinedIcon style={{fill:"#5CD85A"}} />
                         </IconButton>
                         <IconButton aria-label="settings" >
-                            <MoreVertIcon />
+                            <DeleteOutlinedIcon 
+                            style={{fill:"#FF0000"}} 
+                            />
                         </IconButton>
                         </div>
                         }
                         title={list.name}
                         // subheader={props.subtitle}
                     />
-                    
+                    <Modal
+                        open={openeditlist}
+                        onClose={handleCloseeditlist}
+                        aria-labelledby="modal-modal-title"
+                        aria-describedby="modal-modal-description"
+                        className= "modalclass"
+                        >
+                        <Editlist listID = {list.id} listName= {list.name} proj={list.project}/>
+                        </Modal>
                         <CardsofList listId={list.id} projectId= {projectId} style={{width:"100%"}}/>
                         <Button aria-describedby={list.id} variant="outlined" startIcon= {<AddIcon/>} onClick={handleClick} style={{margin: 15}}>
                         Add Card
@@ -230,14 +236,15 @@ return(
                         </Box>
                         </Popper>
                          </Card>
-                   </div>
+                   </div> */}
+                   <CardsofList list={list} projectId= {projectId} listID={list.id}/>
                    </>
                     ))}
                     
               </div>
     </div>
     
-    </>
+    </div>
 )
 }
 
