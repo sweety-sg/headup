@@ -35,6 +35,7 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all().order_by('id')
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    pagination_class = None
 
 
     @action(methods=['GET'], detail = False, url_path='projects',url_name='user-projects')
@@ -73,6 +74,14 @@ class UserViewSet(viewsets.ModelViewSet):
             return Response(user_data.data)
         else:
             return HttpResponseForbidden()
+    
+    @action(methods=['GET'], detail = False, url_path='info',url_name='user-info')
+    def user_self_info(self,request):
+        if(request.user.is_authenticated):
+            info = UserSerializer(request.user)
+            return Response(info.data)
+        else:
+            return HttpResponseForbidden()
 
     @action(methods=['GET'], detail = False, url_path='logout',url_name='logout')
     def user_logout(self,request):
@@ -84,7 +93,7 @@ class UserViewSet(viewsets.ModelViewSet):
 
     def get_permissions(self):
         if self.request.method == 'GET':
-            self.permission_classes = [ NotDisabled]
+            self.permission_classes = [permissions.IsAuthenticated]
         elif self.request.method == 'PUT' or self.request.method == 'PATCH':
             self.permission_classes = [isSelforAdmin,NotDisabled]
             # self.permission_classes = [NotDisabled]
@@ -97,6 +106,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
     permission_classes = [permissions.IsAuthenticated,NotDisabled]
+    pagination_class = None
     
     def project_create(self, request, *args, **kwargs):
     #    serializer.save(creator = self.request.user)
@@ -150,13 +160,14 @@ class ProjectViewSet(viewsets.ModelViewSet):
                     )
             return Response('Please enter a name', status=status.HTTP_400_BAD_REQUEST)
 
-    @action(methods=['GET'], detail = False, url_path='lists',url_name='project-lists')
-    def project_lists(self,request):
-        if(request.user.is_authenticated and not (request.user.disabled)):
-            serializer = ProjectSerializer(request.user.projects.all(), many = True)
-            return Response(serializer.data)
-        else:
-            return HttpResponseForbidden()
+    # @action(methods=['GET'], detail = False, url_path='lists',url_name='project-lists')
+    # def project_lists(self,request,pk ,format=None):
+    #     proj = Project.objects.get(id=pk)
+    #     if(request.user.is_authenticated and not (request.user.disabled)):
+    #         serializer = ListSerializer(proj.project_l.all(), many = True)
+    #         return Response(serializer.data)
+    #     else:
+    #         return HttpResponseForbidden()
 
     # def proj_update(self, serializer):
     #     user_obj = self.request.user
@@ -262,6 +273,24 @@ class MembersofProject_v(APIView):
         serializer = UserSerializer(members, many= True)
         return JsonResponse(serializer.data, safe=False)
 
+class ListOfProjects(APIView):
+    '''list all the lists of a given project'''
+    permission_classes = [NotDisabled]
+
+    def get(self, request, pk ,format=None):
+        proj = Project.objects.get(id=pk)
+        serializer = ListProjectSerializer(proj.project_l.all(), many = True)
+        return Response(serializer.data)
+   
+class CardsOfLists(APIView):
+    '''list all the cards of a given project'''
+    permission_classes = [NotDisabled]
+
+    def get(self, request, pk ,format=None):
+        list = Lists.objects.get(id=pk)
+        serializer = CardProjectSerializer(list.list.all(), many = True)
+        return Response(serializer.data)
+
 @if_loggedin('headup:home')
 def oauth_redirect(req):
     """ 
@@ -323,8 +352,7 @@ def authcode(req):
             # return HttpResponseRedirect(('http://localhost:3000/login'))
             login(req, user_object)
             return res
-            # return HttpResponseRedirect(reverse('headup:home'))
-            # return response 
+             
         else:
             return HttpResponseNotAllowed('Sorry! This site is only accessible to IMG maintainers.')
     else:

@@ -62,5 +62,22 @@
 
 }
 .user-cards{
-    width: 300px !important;
+    width: 350px !important;
+}
+.project-card{
+    height: auto !important;
+    display:"flex";
+    flex-direction:"column";
+}
+.end{
+    justify-self: flex-end !important;
+    align-self: flex-end !important;
+    position: relative;
+    bottom: 0;
+}
+.member-chips{
+    margin-top: 1.2rem;
+    border: 0.1px solid #f5f5f5;
+    border-radius: 10px;
+    padding: 0.5rem;
 }

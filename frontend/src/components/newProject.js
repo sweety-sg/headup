@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import axios from "axios";
 // import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
@@ -17,12 +17,30 @@ import Cookies from 'js-cookie';
 import Datetime from 'react-datetime';
 import { Editor } from '@tinymce/tinymce-react';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import { useHistory } from "react-router-dom";
+
 // import AdapterDateFns from '@mui/lab/AdapterDateFns';
 // import LocalizationProvider from '@mui/lab/LocalizationProvider';
 
 import "./components.css";
 // Axios.defaults.headers.common['X-CSRF-TOKEN'] = token;
 const NewProject = (props)=> {
+  let history = useHistory();
+
+        async function fetchUserDetails(){
+                axios
+                    .get('http://127.0.0.1:3000/headup/user/info', {headers:{ "X-CSRFToken":Cookies.get('csrftoken')}})
+                    .then((response) => {
+                        if(response.data.disabled){
+                            history.push("/404");
+                        }
+                    })
+                    .catch((error) => {
+                        history.push("/");
+                        console.log(error)
+                    });
+            }
+  
     const [formData, setFormData] = React.useState({
         name: "",
         
@@ -33,6 +51,7 @@ const NewProject = (props)=> {
     // console.log(date)
     const [wiki, setWiki] = React.useState("");
     const [status, setStatus] = React.useState("");
+    const [creator, setCreator] = React.useState(0);
     const [start_date, setStart_date] = React.useState("2021-09-04T22:52:11Z");
     const [when, setWhen] = React.useState("2021-09-04T22:52:11Z");
     const [members, setMembers] = React.useState([]);
@@ -80,12 +99,23 @@ const NewProject = (props)=> {
             .get('http://127.0.0.1:3000/headup/user/')
             .then((response) => {
                 console.log("entered");
-                console.log(response.data.results);
-                setUsers(response.data.results);
+                console.log(response.data);
+                setUsers(response.data);
                 console.log("fetched users");
             })
             .catch((error) => console.log(error + "uff"));
     }
+    async function fetchUserInfo(){
+      axios
+          .get('http://127.0.0.1:3000/headup/user/info', {headers:{ "X-CSRFToken":Cookies.get('csrftoken')}})
+          .then((response) => {
+              setCreator(response.data.id)
+              console.log(response.data.id + "creator")
+          })
+          .catch((error) => {
+              console.log(error)
+          });
+  }
     // function Memberdetails() {
     //     {members.map(function(member, index){
     //         {users.map((user) => (
@@ -117,7 +147,7 @@ const NewProject = (props)=> {
             status : status,
             members : members,
             project_admins : project_admins,
-            // creator: request.user
+            creator: creator
         }
         axios
           .post("http://127.0.0.1:3000/headup/project/", data, {
@@ -136,6 +166,8 @@ const NewProject = (props)=> {
 
     React.useEffect(()=>{
         fetchUsers();
+        fetchUserDetails();
+        fetchUserInfo();
 
     }, []);
 

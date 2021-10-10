@@ -1,8 +1,9 @@
 import React from 'react';
+import axios from 'axios';
+import Cookies from 'js-cookie';
 import clsx from 'clsx';
 import { makeStyles , createTheme} from '@material-ui/core/styles';
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom"; 
-import LinkWrapper from "./components/linkwrapper";
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
 import Box from '@material-ui/core/Box';
@@ -14,9 +15,6 @@ import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import Badge from '@material-ui/core/Badge';
 import Container from '@material-ui/core/Container';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
-// import Link from '@material-ui/core/Link';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
@@ -35,7 +33,7 @@ import './components/style.css'
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import { Fab } from '@mui/material';
 import { NavLink } from 'react-router-dom';
-// import { useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 // import white from "material-ui/core/colors/white";
 
 // const history = useHistory();
@@ -44,6 +42,7 @@ import { NavLink } from 'react-router-dom';
 //   let path = `newPath`; 
 //   history.push(path);l
 // }
+
 const themeLight = createTheme({
   palette: {
     background: {
@@ -175,6 +174,25 @@ const useStyles = makeStyles((theme) => ({
   }));
   
 export default function Dashboard(props) {
+  let history = useHistory();
+
+  async function fetchUserDetails(){
+        axios
+            .get('http://127.0.0.1:3000/headup/user/info', {headers:{ "X-CSRFToken":Cookies.get('csrftoken')}})
+            .then((response) => {
+                if(response.data.disabled){
+                    history.push("/404");
+                }
+            })
+            .catch((error) => {
+                history.push("/");
+                console.log(error)
+            });
+    }
+  React.useEffect(()=>{
+      fetchUserDetails();
+  }, []);
+
     const [light, setLight] = React.useState(true);
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);

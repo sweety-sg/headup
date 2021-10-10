@@ -14,7 +14,8 @@ import EditProject from './components/editproject';
 import ProjectPage from './components/projectpage';
 import CurrentUser from "./components/currentuser";
 import Users from "./components/users";
-// import Projects from './components/allprojects';
+import Projects from './components/projects';
+import Error from './error';
 
 const App = () => {
   return (
@@ -29,25 +30,28 @@ const App = () => {
       <Route exact path="/dashboard">
         <Dashboard title = "Dashboard"/>
       </Route>
-      <Route exact path="/myprojects">
+      {/* <Route exact path="/myprojects">
         <Project />
-      </Route>
-      {/* <Route exact path="/projects">
-        <Projects />
       </Route> */}
+      <Route exact path="/projects">
+        <Projects />
+      </Route>
       <Route exact path="/newproject">
         <NewProject />
       </Route>
       <Route exact path="/editproject">
         <EditProject />
       </Route>
-      <Route exact path="/cardstyle">
+      {/* <Route exact path="/cardstyle">
         <Cardstyle />
-      </Route>
+      </Route> */}
       <Route name="myproject" exact path="/projects/:projectId" component={ProjectPage} />
       <Route exact path="/users">
         <Users />
       </Route>      
+      <Route exact path="/404">
+        <Error />
+      </Route> 
       {/* <Users /> */}
     </div>
     

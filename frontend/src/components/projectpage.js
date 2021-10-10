@@ -1,46 +1,14 @@
 import React, {useRef} from 'react';
 import axios from "axios";
-import Cookies from 'js-cookie';
-import { Redirect } from 'react-router-dom';
 import { useTheme, makeStyles, createTheme } from "@material-ui/core/styles";
-import Dashboard from '../Dashboard';
-import clsx from 'clsx';
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom"; 
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Drawer from '@material-ui/core/Drawer';
-import Box from '@material-ui/core/Box';
-import Card from '@mui/material/Card';
-import CardHeader from '@mui/material/CardHeader';
-import Avatar from '@mui/material/Avatar';
-import Toolbar from '@material-ui/core/Toolbar';
-import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
-import IconButton from '@material-ui/core/IconButton';
-import Badge from '@material-ui/core/Badge';
-import Container from '@material-ui/core/Container';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
-import MenuIcon from '@material-ui/icons/Menu';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import NotificationsIcon from '@material-ui/icons/Notifications';
-import GroupWorkIcon from '@material-ui/icons/GroupWork';
-import { Icon, Tooltip } from '@material-ui/core';
-import HomeIcon from '@material-ui/icons/Home';
-import {mainListItems ,secondaryListItems} from '../pages' ;
-import Data from '../data';
-import Project from './project';
 import AddIcon from '@mui/icons-material/Add';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import MyAppBar from './Myappbar';
 import './style.css';
 import Button from '@mui/material/Button';
 import VisibilityIcon from '@mui/icons-material/Visibility';
-import Cardstyle from './Cardstyle';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import CommentIcon from '@mui/icons-material/Comment';
-import AssignmentIcon from '@mui/icons-material/Assignment';
-import CardContent from '@mui/material/CardContent';
 import CardsofList from './cardsoflist';
 import Popper from '@mui/material/Popper';
 import Addcard from './addcard';
@@ -49,12 +17,7 @@ import { palette } from '@mui/system';
 import Modal from '@mui/material/Modal';
 import Addlist from './addlist';
 import './style.css';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
-import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
-import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
-import Editlist from './editlist';
+
 
 
 
@@ -128,31 +91,6 @@ axios
 },[]);
 
 
-// function fetchCards(lis){
-//     var listId = lis.id
-//     console.log("called for " + listId)
-//     axios
-//     .get("http://127.0.0.1:8000/headup/project/" +projectId+"/lists/" + listId ).then((res) =>{
-//         console.log(res.data);
-//         setCurrentCards(res.data);
-//         console.log("yes");
-//     })
-//     .catch((err) => {
-//         console.log(err);
-//         console.log("no");
-//       });
-      
-// }
-
-// async function componentWillMount(){
-//     {lists.map((list) => (
-//         <>
-//         {fetchCards.call(this,list)}
-//         {data.append(currentCards)}
-        
-//         </>
-//     ))};
-// }
 const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
     setOpen((previousOpen) => !previousOpen);
@@ -190,53 +128,6 @@ return(
     <div style={{display:"flex", flexDirection :"row", flexWrap:'wrap' }} className="font-body">
                 {lists.map((list) => (
                   <>
-                  
-                    {/* {fetchCards.call(this,list)} */}
-                   
-                     {/* <div style={{margin: "20", display:"flex", padding:15, height:"auto"}}>
-                     <Card sx={{ width: 345 ,height: "auto"}} style= {{display:"flex", flexDirection: "column",  alignSelf:"flex-start", maxHeight: "1200px", overflow:"scroll"}} >
-                        <CardHeader
-                        avatar={
-                        <Avatar sx={{ bgcolor: "#336EF1" }}>
-                            <AssignmentIcon />
-                          </Avatar>
-                        }
-                        action={
-                            <div>
-                        <IconButton aria-label="settings" onClick={handleOpeneditlist} >
-                            <EditOutlinedIcon style={{fill:"#5CD85A"}} />
-                        </IconButton>
-                        <IconButton aria-label="settings" >
-                            <DeleteOutlinedIcon 
-                            style={{fill:"#FF0000"}} 
-                            />
-                        </IconButton>
-                        </div>
-                        }
-                        title={list.name}
-                        // subheader={props.subtitle}
-                    />
-                    <Modal
-                        open={openeditlist}
-                        onClose={handleCloseeditlist}
-                        aria-labelledby="modal-modal-title"
-                        aria-describedby="modal-modal-description"
-                        className= "modalclass"
-                        >
-                        <Editlist listID = {list.id} listName= {list.name} proj={list.project}/>
-                        </Modal>
-                        <CardsofList listId={list.id} projectId= {projectId} style={{width:"100%"}}/>
-                        <Button aria-describedby={list.id} variant="outlined" startIcon= {<AddIcon/>} onClick={handleClick} style={{margin: 15}}>
-                        Add Card
-                        </Button>
-
-                        <Popper id={list.id} open={open} anchorEl={anchorEl}>
-                        <Box sx={{ border: 1, p: 1, bgcolor: 'background.paper' ,borderColor:'primary.main'}}>
-                            <Addcard list={list} projectId={projectId}/>
-                        </Box>
-                        </Popper>
-                         </Card>
-                   </div> */}
                    <CardsofList list={list} projectId= {projectId} listID={list.id}/>
                    </>
                     ))}

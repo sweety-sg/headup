@@ -14,10 +14,25 @@ import Cookies from 'js-cookie';
 import { withRouter, Redirect } from "react-router-dom";
 import { Editor } from '@tinymce/tinymce-react';
 import Datetime from 'react-datetime';
+import { useHistory } from "react-router-dom";
 // import { connect } from "react-redux";
 
 const EditProject= (props) =>{
-    
+    let history = useHistory();
+
+        async function fetchUserDetails(){
+                axios
+                    .get('http://127.0.0.1:3000/headup/user/info', {headers:{ "X-CSRFToken":Cookies.get('csrftoken')}})
+                    .then((response) => {
+                        if(response.data.disabled){
+                            history.push("/404");
+                        }
+                    })
+                    .catch((error) => {
+                        history.push("/");
+                        console.log(error)
+                    });
+            }
     
     var project = props.data
     var projectId = project.id
@@ -58,14 +73,15 @@ const EditProject= (props) =>{
             .get('http://127.0.0.1:3000/headup/user/')
             .then((response) => {
                 console.log("entered");
-                console.log(response.data.results);
-                setUsers(response.data.results);
+                console.log(response.data);
+                setUsers(response.data);
                 console.log("fetched users");
             })
             .catch((error) => console.log(error + "uff"));
     }
     React.useEffect(()=>{
         fetchUsers();
+        fetchUserDetails();
 
     }, []);
      const handleStatusChange = (event, data) => {

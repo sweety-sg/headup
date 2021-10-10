@@ -35,9 +35,9 @@ export const mainListItems = (
     </ListItem>
     </Link>
 
-    <Link to="/dashboard" style={{textDecoration:"none"}}>
-    <ListItem button as={NavLink} to="http://127.0.0.1:3000/dashboard">
-    <Tooltip title="Boards" enterDelay={200} leaveDelay={100} placement="right">
+    <Link to="/projects" style={{textDecoration:"none"}}>
+    <ListItem button as={NavLink} to="http://127.0.0.1:3000/projects">
+    <Tooltip title="Projects" enterDelay={200} leaveDelay={100} placement="right">
     <ListItemIcon>
         <LayersIcon/>           
       </ListItemIcon>

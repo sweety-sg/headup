@@ -13,7 +13,7 @@ class User(AbstractUser):
     id = models.AutoField(primary_key = True)
     enrolment = models.IntegerField(blank= True ,null=True)
     # user_id = models.IntegerField(blank= False)
-    image = models.ImageField(blank=True)
+    image = models.CharField(max_length=655, blank=True, null=True)
     full_name = models.CharField(max_length=255, blank=True, null=True)
     email = models.CharField(db_column='Email', max_length=255, blank=True, null=True)  # Field name made lowercase.
     password = models.CharField(db_column='Password', max_length=255, blank=True, null=True)  # Field name made lowercase.
@@ -34,11 +34,14 @@ class Project(models.Model):
     start_date = models.DateTimeField(default=datetime.now)
     when = models.DateTimeField(blank=True, null=True)
     members = models.ManyToManyField(User, related_name='projects')
-    project_admins = models.ManyToManyField(User, related_name='members_p_a')
+    project_admins = models.ManyToManyField(User, related_name='admins')
+    visible= models.BooleanField(default=True)
+    
+
 
     
-    # class Meta:
-    #     ordering = ['-id']
+    class Meta:
+        ordering = ['-id']
 
 class TeamMembers(models.Model):
     member = models.ForeignKey(to=User, on_delete=models.SET_NULL, null=True, related_name='team_member')
@@ -72,7 +75,7 @@ class Cards(models.Model):
     title = models.CharField(db_column='Title', max_length=255, blank=True, null=True)  # Field name made lowercase.
     description = models.TextField(blank=True, null=True)
     asignees = models.ManyToManyField(User, related_name='cards')
-    list = models.ForeignKey('Lists',on_delete=models.CASCADE, blank=True, null=True,related_name="list")
+    list = models.ForeignKey('Lists',on_delete=models.CASCADE, blank=True, null=True,related_name="cards")
     status = models.BooleanField(blank=True, null=True)
     
 

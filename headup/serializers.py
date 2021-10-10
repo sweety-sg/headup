@@ -65,3 +65,18 @@ class TeamMemberSerializer(serializers.ModelSerializer):
         model = TeamMembers
         fields = '__all__'
 
+class CardProjectSerializer(serializers.ModelSerializer):
+    # project_c = ProjectSerializer()
+    list  = ListSerializer()
+    # list = ListSerializer(many = True , read_only = True)
+    class Meta:
+        model = Cards
+        fields = ['id','title','list','status','description']
+
+class ListProjectSerializer(serializers.ModelSerializer):
+    cards = CardSerializer(many=True, read_only = True)
+    class Meta:
+        model = Lists
+        fields = ['id','name','status','project', 'cards']
+
+
