@@ -95,3 +95,35 @@
     margin-top: 1rem;
     justify-self: flex-end;
 }
+.user-icon:hover{
+    height:31px;
+    width: 31px;
+    border: 3px solid grey;
+    margin-left: 15px;
+    
+}
+.right-popup{
+    position: absolute !important;
+    right:10;
+    top: 100 ;
+    justify-self: flex-end;
+}
+/* .contains{
+    display:flex;
+    flex-direction: column !important;
+    align-items: center !important;
+    width: 100% !important;
+}
+.tabs{
+    position: relative;
+    margin: auto !important;
+    align-self: center !important;
+    width: 1000px !important;
+    margin-left: 5rem;
+}
+.tab-div{
+    width: 100% !important;
+}
+.one-tab{
+    width: 50% !important;
+} */

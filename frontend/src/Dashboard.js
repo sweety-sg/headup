@@ -34,6 +34,9 @@ import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import { Fab } from '@mui/material';
 import { NavLink } from 'react-router-dom';
 import { useHistory } from "react-router-dom";
+import PropTypes from 'prop-types';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
 // import white from "material-ui/core/colors/white";
 
 // const history = useHistory();
@@ -172,6 +175,39 @@ const useStyles = makeStyles((theme) => ({
       fill: 'white'
     }
   }));
+
+  function TabPanel(props) {
+    const { children, value, index, ...other } = props;
+  
+    return (
+      <div
+        role="tabpanel"
+        hidden={value !== index}
+        id={`simple-tabpanel-${index}`}
+        aria-labelledby={`simple-tab-${index}`}
+        {...other}
+      >
+        {value === index && (
+          <Box sx={{ p: 3 }}>
+            <Typography>{children}</Typography>
+          </Box>
+        )}
+      </div>
+    );
+  }
+  
+  TabPanel.propTypes = {
+    children: PropTypes.node,
+    index: PropTypes.number.isRequired,
+    value: PropTypes.number.isRequired,
+  };
+  
+  function a11yProps(index) {
+    return {
+      id: `simple-tab-${index}`,
+      'aria-controls': `simple-tabpanel-${index}`,
+    };
+  }
   
 export default function Dashboard(props) {
   let history = useHistory();
@@ -206,14 +242,36 @@ export default function Dashboard(props) {
       setOpen(false);
     };
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+
+    const [value, setValue] = React.useState(0);
+
+    const handleChange = (event, newValue) => {
+      setValue(newValue);
+    };
   
     return (
       <div className={classes.root}>
         <CssBaseline />
         
         <MyAppBar title="Dashboard"/>
-        
-        <main className={classes.content}>
+        <div style={{marginTop:"100px",justifySelf:"center", width:"100%"}} className="contains tab-div">
+        <Box sx={{ width: '100%' }} className="contains tab-div">
+        {/* <Box sx={{ borderBottom: 1, borderColor: 'divider' ,margin:"auto",width:"100%"}} className="tab-div"> */}
+          <Tabs value={value} onChange={handleChange}  style={{width:"100%", align:"center" , display:"flex", justifyContent:"space-between", margin:"auto",paddingLeft:"3rem",paddingRight:"3rem"}} className="tab-div tabs">
+            <Tab label="Your Projects" {...a11yProps(0)} style={{width:"50%"}} className="one-tab"/>
+            <Tab label="Your Cards" {...a11yProps(1)}  style={{width:"50%"}} className="one-tab"/>
+          </Tabs>
+        {/* </Box> */}
+        <Divider/>
+        <TabPanel value={value} index={0}>
+          <Project/>
+        </TabPanel>
+        <TabPanel value={value} index={1}>
+          <Data/>
+        </TabPanel>
+      </Box>
+      </div>
+        {/* <main className={classes.content}>
           <div className={classes.appBarSpacer} />
           <Container maxWidth="lg" className={classes.container}>
           <Typography variant="h6">  Your Projects </Typography>
@@ -231,7 +289,7 @@ export default function Dashboard(props) {
             </Box>
             
           </Container>
-        </main>
+        </main> */}
       </div>
     );
   }

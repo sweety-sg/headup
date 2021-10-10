@@ -16,7 +16,9 @@ import { borders } from '@mui/system';
 import { palette } from '@mui/system';
 import Modal from '@mui/material/Modal';
 import Addlist from './addlist';
+import Cookies from 'js-cookie';
 import './style.css';
+import { useHistory } from "react-router-dom";
 
 
 
@@ -62,6 +64,24 @@ const ProjectPage=(props) =>{
     const handleOpeneditlist = () => {setOpeneditlist(true)};
   const handleCloseeditlist = () => setOpeneditlist(false);
   var lis = {}
+  let history = useHistory();
+
+        async function fetchUserDetails(){
+                axios
+                    .get('http://127.0.0.1:3000/headup/user/info', {headers:{ "X-CSRFToken":Cookies.get('csrftoken')}})
+                    .then((response) => {
+                        if(response.data.disabled){
+                            history.push("/404");
+                        }
+                        // else{
+                        //     setUserinfo(response.data)
+                        // }
+                    })
+                    .catch((error) => {
+                        history.push("/");
+                        console.log(error)
+                    });
+            }
 
 React.useEffect(() => {
 axios
@@ -86,7 +106,7 @@ axios
   console.log(err);
   console.log("no");
 });
-
+fetchUserDetails();
 
 },[]);
 

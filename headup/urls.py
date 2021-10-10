@@ -15,6 +15,7 @@ urlpatterns = [
     path('' , home , name='home'),
     path('login', oauth_redirect, name = 'oauth_redirect'),
     path('oauth', authcode, name = 'authcode'),
+    path('logout', logout_view, name="logout"),
     # path('user/<int:pk>', UserDetail, name = 'UserDetail'),
     path('projects', Projects_v.as_view()),
     path('projects/<int:pk>/lists', ListOfProjects.as_view()),

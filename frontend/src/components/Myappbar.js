@@ -23,7 +23,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import GroupWorkIcon from '@material-ui/icons/GroupWork';
-import { Icon, Tooltip } from '@material-ui/core';
+import { Icon, Menu, MenuItem, Tooltip } from '@material-ui/core';
 import HomeIcon from '@material-ui/icons/Home';
 import {mainListItems ,secondaryListItems} from '../pages' ;
 import Data from '../data';
@@ -37,6 +37,9 @@ import { NavLink } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import './style.css'
 import { useHistory } from "react-router-dom";
+import { ClickAwayListener } from '@mui/material';
+import { logout } from './Login/logout';
+
 const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -180,10 +183,23 @@ const useStyles = makeStyles((theme) => ({
         
             return color;
             }
-    
+    const handleClick = () => {
+    setOpenlogo((prev) => !prev);
+  };
+
+  const handleClickAway = () => {
+    setOpenlogo(false);
+  };
+  
+  const renderMenu = (
+    <Menu>
+      "hello"
+    </Menu>
+  );
     const [openproj, setOpenproj] = React.useState(false);
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
+    const [openlogo, setOpenlogo] = React.useState(false);
     const handleOpenproj = () => setOpenproj(!openproj);
     const handleCloseproj = () => setOpenproj(false);
     const handleDrawerOpen = () => {
@@ -192,8 +208,28 @@ const useStyles = makeStyles((theme) => ({
     const handleDrawerClose = () => {
       setOpen(false);
     };
+    const styles = {
+      position: 'absolute',
+      top: 68,
+      right: 0,
+      zIndex: 1,
+      border: '1px solid',
+      p: 1,
+      bgcolor: 'background.paper',
+    };
+  
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
     return(
+       
+      <>
+      {/* {openlogo ? (
+          <Box sx={{styles}} className="right-popup">
+            Click me, I will stay visible until you click outside.
+            Click me, I will stay visible until you click outside.
+            Click me, I will stay visible until you click outside.
+            Click me, I will stay visible until you click outside.
+          </Box>
+        ) : null} */}
         <div className={classes.root}>
              <CssBaseline />
         <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
@@ -255,11 +291,28 @@ const useStyles = makeStyles((theme) => ({
                 <NotificationsIcon />
               </Badge>
             </IconButton>
+            <div>
+            <IconButton color="inherit">
             <Avatar {...stringAvatar(userinfo.full_name)}
-            sx={{ width: 31, height: 31, margin: "6px",alignSelf:"center", marginLeft:"18px" }}
+            sx={{ width: 28, height: 28, margin: "6px",alignSelf:"center", marginLeft:"12px", fontSize:"15px" }}
+            // className="user-icon"
+            // onClick={logout()}
              />
+             </IconButton>
+             {/* <ClickAwayListener onClickAway={handleClickAway}>
+                <Box sx={{ position: 'relative' }}>
+                <Avatar {...stringAvatar(userinfo.full_name)}
+                  sx={{ width: 28, height: 28, margin: "6px",alignSelf:"center", marginLeft:"18px" }}
+                  // className="user-icon"
+                  onClick={handleClick}
+                  />
+                  
+                </Box>
+              </ClickAwayListener> */}
+             </div>
           </Toolbar>
         </AppBar>
+        
         <Drawer
           variant="permanent"
           classes={{
@@ -278,5 +331,7 @@ const useStyles = makeStyles((theme) => ({
           <List>{secondaryListItems}</List>
         </Drawer>
         </div>
+        
+        </>
     )
   }
