@@ -9,6 +9,7 @@ export default function Error(){
         <div className="not-found" style={{margin:"auto", width:"500px", marginTop:"100px"}}>
         <img
           src="https://i.pinimg.com/564x/a9/59/a7/a959a73fcb2cb2d0b865a89450a74043.jpg"
+          
           alt="error"
           className="not-found-illustration vert-move"
         />

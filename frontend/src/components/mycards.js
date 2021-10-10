@@ -26,7 +26,7 @@ export default function MyCards(props){
 
     return(
         <Cardstyle title= {card.title} subtitle={card.list} content={card.description} type="card" status={card.status} id={card.id} comp={card} 
-                     projectId={list.project}
+                     projectId={list.project} chips={card.asignees}
                      />
     )
 }

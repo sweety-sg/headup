@@ -148,15 +148,20 @@ export default function Projects(){
                     </Typography>
                         {project.project_members.map((value) => (
                         <Chip
-                            avatar={<Avatar alt={value.full_name} src="" />}
+                            avatar={<Avatar 
+                                alt={value.full_name} 
+                                src={users.filter((user, index) => user.id == value.id)[0]
+                                    .image }
+                                />}
                             key={value.id}
                             label={
                             // users.filter((user, index) => user.id == value)[0]
                             //     .full_name
                             value.full_name
                             }
-                            style={{ margin: "10px", borderRadius: "20px" }}
+                            // style={{ margin: "10px", borderRadius: "20px" }}
                             variant="outlined"
+                            className="name-chip"
                         />
                         ))}
                     </div>
@@ -166,13 +171,20 @@ export default function Projects(){
                     </Typography>
                         {project.project_admins.map((value) => (
                         <Chip
-                            avatar={<Avatar alt={value.full_name} src="" />}
+                            avatar=
+                            {<Avatar alt={
+                                users.filter((user, index) => user.id == value)[0]
+                                .full_name
+                            } 
+                            src={users.filter((user, index) => user.id == value)[0]
+                            .image }
+                            />}
                             key={value}
                             label={
                             users.filter((user, index) => user.id == value)[0]
                                 .full_name
                             }
-                            style={{ margin: "10px", borderRadius: "20px" }}
+                            className="name-chip"
                             variant="outlined"
                         />
                         ))}

@@ -133,7 +133,7 @@ export default function Users(){
                 <Card style={{display:"flex", justifyContent:"space-around",padding: "0.5rem", margin:"1rem", flexWrap:'wrap'}} className="user-cards" Wrap>
                 <div style={{display:"flex",justifyContent:"space-around",flexWrap:'wrap',width:"100%"}}>
                 <div style={{margin:"0.5rem", display:"flex", alignItems:"center"}}>
-                <Avatar {...stringAvatar(user.full_name)} style={{height:"90px",width:"90px"}}/>
+                <Avatar {...stringAvatar(user.full_name)} style={{height:"90px",width:"90px"}} src={user.image}/>
                 </div>
                 <div className="font-body columnflex" style={{margin:"0.5rem",height:"100px", alignSelf:"center", justifyContent:"space-around"}}>
                      <Typography variant="h6" gutterBottom  component="div">

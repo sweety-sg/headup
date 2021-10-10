@@ -127,3 +127,11 @@
 .one-tab{
     width: 50% !important;
 } */
+.name-chip{
+    margin: "10px" !important;
+     border-radius: "20px";
+     /* border: 0.5px solid #ececec !important; */
+}
+.name-chip:hover{
+    background: #e6e6e6;
+}

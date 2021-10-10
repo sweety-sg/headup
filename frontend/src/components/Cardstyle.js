@@ -25,7 +25,8 @@ import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import EditProject from "./editproject";
 import Modal from '@mui/material/Modal';
 import './style.css'
-import EditCard from './editcard'
+import EditCard from './editcard';
+import Chip from "@material-ui/core/Chip";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -42,11 +43,14 @@ export default function Cardstyle(props) {
     var color="";
     var boxshadow="";
     var display="block";
+
     
     const [openproj, setOpenproj] = React.useState(false);
     const [opencard, setOpencard] = React.useState(false);
     const [proj, setProj] = React.useState({});
-    const [card, setCard] = React.useState({});
+    const [card, setCard] = React.useState({asignees:[]});
+    const [users, setUsers] = React.useState([]);
+    const [asn, setAsn] = React.useState([]);
     // const [display, setDisplay] = React.useState("block")
     // const handleOpenproj = () => setOpenproj(true);
     const handleCloseproj = () => setOpenproj(false);
@@ -76,6 +80,21 @@ export default function Cardstyle(props) {
          setOpen((previousOpen) => !previousOpen);
      }
  }
+ async function fetchUsers() {
+  axios
+      .get('http://127.0.0.1:3000/headup/user/')
+      .then((response) => {
+          console.log("entered");
+          console.log(response.data);
+          setUsers(response.data);
+          console.log("fetched users");
+      })
+      .catch((error) => console.log(error + "uff"));
+}
+React.useEffect(() =>{
+  fetchUsers()
+},[]);
+
  if(props.type=="project"){
      display= "none"
      switch (props.status) {
@@ -99,6 +118,9 @@ export default function Cardstyle(props) {
      }
  }
   if(props.type=="card"){
+    console.log(props.comp)
+    // console.log(users.filter((user, index) => user.id == 1)[0].full_name)
+                                
       if(props.status){
           color= ("#5CD85A")
           boxshadow= "0px -10px 9px -12px #5CD85A inset"
@@ -207,13 +229,53 @@ function handleDeleteEventC(id) {
         image="/static/images/cards/paella.jpg"
         alt="Paella dish"
       /> */}
-      <Link to={props.link} style={{textDecoration:"none"}}>
-      <CardContent>
+      {props.link &&
+        <Link to={props.link} style={{textDecoration:"none"}}>
+        <CardContent>
+          <Typography variant="body2" color="text.secondary">
+          <div dangerouslySetInnerHTML={createMarkup()}></div>
+          </Typography>
+        </CardContent>
+        </Link>
+      }
+
+      {!(props.link) &&
+        <CardContent>
         <Typography variant="body2" color="text.secondary">
         <div dangerouslySetInnerHTML={createMarkup()}></div>
         </Typography>
       </CardContent>
-      </Link>
+      }
+        {/* {props.comp.asignees && (users!=[]) && card &&
+        <>
+        <div className="member-chips">
+                    <Typography variant="body2" color="text.primary">
+                    Assignees:
+                    </Typography>
+                        {card.asignees.map((value) => (
+                        <Chip
+                            avatar=
+                            {<Avatar alt={
+                                users.filter((user, index) => user.id == value)
+                                .full_name
+                            } 
+                            src={users.filter((user, index) => user.id == value)
+                            .image }
+                            />}
+                            value
+                            key={value}
+                            label={
+                            users.filter((user, index) => user.id == value)
+                                .full_name
+                            }
+                            className="name-chip"
+                            variant="outlined"
+                        />
+                        ))}
+                    </div>
+                    </>
+        } */}
+      
       <CardActions disableSpacing style= {{display:flexbox, justifyContent:'flex-end' ,justifySelf: 'flex-end'}}>
         {/* <IconButton aria-label="add to favorites">
           <FavoriteIcon />
