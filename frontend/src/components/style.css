@@ -63,6 +63,7 @@
 }
 .user-cards{
     width: 350px !important;
+    min-height: 12rem !important;
 }
 .project-card{
     height: auto !important;
@@ -80,4 +81,17 @@
     border: 0.1px solid #f5f5f5;
     border-radius: 10px;
     padding: 0.5rem;
+}
+.force-center{
+    position: relative !important;
+    margin: auto !important;
+    display: flex;
+    justify-content: center;
+    align-self: center;
+    padding: 22rem;
+    
+}
+.toggleholder{
+    margin-top: 1rem;
+    justify-self: flex-end;
 }

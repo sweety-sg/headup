@@ -34,7 +34,9 @@ import Modal from '@mui/material/Modal';
 import NewProject from './newProject';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import { NavLink } from 'react-router-dom';
+import Avatar from '@mui/material/Avatar';
 import './style.css'
+import { useHistory } from "react-router-dom";
 const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -129,6 +131,56 @@ const useStyles = makeStyles((theme) => ({
     }
   }));
   export default function MyAppBar(props){
+    let history = useHistory();
+        const [userinfo, setUserinfo] = React.useState({full_name:"no name"});
+        async function fetchUserDetails(){
+                axios
+                    .get('http://127.0.0.1:3000/headup/user/info', {headers:{ "X-CSRFToken":Cookies.get('csrftoken')}})
+                    .then((response) => {
+                        if(response.data.disabled){
+                            history.push("/404");
+                        }
+                        else{
+                            setUserinfo(response.data)
+                            console.log(response.data.full_name)
+                        }
+                    })
+                    .catch((error) => {
+                        history.push("/");
+                        console.log(error)
+                    });
+            }
+            React.useEffect(()=>{
+              fetchUserDetails();
+            }, []);
+      function stringAvatar(name) {
+          return {
+              sx: {
+              bgcolor: stringToColor(name),
+              },
+              children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`,
+          };
+          }
+      function stringToColor(string) {
+            let hash = 0;
+            let i;
+        
+            /* eslint-disable no-bitwise */
+            for (i = 0; i < string.length; i += 1) {
+                hash = string.charCodeAt(i) + ((hash << 5) - hash);
+            }
+        
+            let color = '#';
+        
+            for (i = 0; i < 3; i += 1) {
+                const value = (hash >> (i * 8)) & 0xff;
+                color += `00${value.toString(16)}`.substr(-2);
+            }
+            /* eslint-enable no-bitwise */
+        
+            return color;
+            }
+    
     const [openproj, setOpenproj] = React.useState(false);
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
@@ -203,6 +255,9 @@ const useStyles = makeStyles((theme) => ({
                 <NotificationsIcon />
               </Badge>
             </IconButton>
+            <Avatar {...stringAvatar(userinfo.full_name)}
+            sx={{ width: 31, height: 31, margin: "6px",alignSelf:"center", marginLeft:"18px" }}
+             />
           </Toolbar>
         </AppBar>
         <Drawer

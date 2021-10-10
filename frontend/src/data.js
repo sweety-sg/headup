@@ -54,7 +54,7 @@ class Data extends React.Component {
             method : "GET",
           });
           const cards = await res.json();
-          console.log(cards)
+          // console.log(cards)
           
           this.setState({
             cards :  cards

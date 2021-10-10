@@ -44,7 +44,7 @@ class Project extends React.Component {
             method : "GET",
           });
           const projects = await res.json();
-          console.log(projects)
+          // console.log(projects)
           this.setState({
             projects :  projects
           });

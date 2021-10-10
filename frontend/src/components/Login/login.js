@@ -3,6 +3,9 @@ import {render} from '@testing-library/react';
 import { Redirect } from 'react-router-dom';
 import axios from 'axios';
 import { useLocation } from 'react-router-dom';
+import { CircularProgress } from '@mui/material';
+import '../style.css'
+
 
 class Login extends React.Component{
     constructor(props){
@@ -39,9 +42,9 @@ class Login extends React.Component{
 
     render(){
         return(
-            <div>
+            <div className="force-center">
                 {this.renderRedirect()}
-                Logging in....
+                <CircularProgress color="inherit" style={{}}/>
             </div>
         )
     }
