@@ -12,13 +12,15 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import CardsofList from './cardsoflist';
 import Popper from '@mui/material/Popper';
 import Addcard from './addcard';
-import { borders } from '@mui/system';
+import { borders, margin } from '@mui/system';
 import { palette } from '@mui/system';
 import Modal from '@mui/material/Modal';
 import Addlist from './addlist';
 import Cookies from 'js-cookie';
 import './style.css';
 import { useHistory } from "react-router-dom";
+import { Dialog } from '@mui/material';
+import Grow from "@material-ui/core/Grow";
 
 
 
@@ -46,7 +48,7 @@ const ProjectPage=(props) =>{
 //   const Theme = useTheme();
   const projectId = props.match.params.projectId
   const [users, setUsers] = React.useState([]);
-  const [project, setProject] = React.useState([]);
+  const [project, setProject] = React.useState({name: "project_name", members:[]});
   const [lists, setLists] = React.useState([]);
   const [currlist, setcurrList] = React.useState([]);
   var [currentCards, setCurrentCards] = React.useState([]);
@@ -61,6 +63,7 @@ const ProjectPage=(props) =>{
   const handleClose = () => setOpenlist(false);
   const handleOpenproj = () => setOpenproj(true);
   const handleCloseproj = () => setOpenproj(false);
+  const [userinfo, setUserinfo] = React.useState({id:0});
     const handleOpeneditlist = () => {setOpeneditlist(true)};
   const handleCloseeditlist = () => setOpeneditlist(false);
   var lis = {}
@@ -73,9 +76,9 @@ const ProjectPage=(props) =>{
                         if(response.data.disabled){
                             history.push("/404");
                         }
-                        // else{
-                        //     setUserinfo(response.data)
-                        // }
+                        else{
+                            setUserinfo(response.data)
+                        }
                     })
                     .catch((error) => {
                         history.push("/");
@@ -107,10 +110,11 @@ axios
   console.log("no");
 });
 fetchUserDetails();
-
 },[]);
 
-
+const lengthmem = ()=>{
+   return (project.members.filter((pro)=> pro == userinfo.id)).length
+}
 const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
     setOpen((previousOpen) => !previousOpen);
@@ -125,21 +129,28 @@ return(
     <div className="columnflexx">
     <Typography variant="h4" className="font-head">
         {project.name}
+        {/* {project.members[0]} */}
     </Typography>
+    {(lengthmem() !=0) && 
+    <>
     <Button variant="contained" style={{marginLeft:"2rem", padding:"12px", height:"60%"}} endIcon={<VisibilityIcon/>} flexWrap>
     Visibility
     </Button>
+    
     <Button onClick={handleOpen} endIcon={<AddIcon/>} style={{justifySelf:"flex-end", position:"absolute", right:"2rem"}}>Add List</Button>
-    <Modal
+    <Dialog
         open={openlist}
         onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
+        // aria-labelledby="modal-modal-title"
+        // aria-describedby="modal-modal-description"
         className= "modalclass"
-        style={{height:"250px"}}
+        style={{height:"320px"}}
+        TransitionComponent={Grow}
       >
-          <Addlist projectId={projectId} />
-      </Modal>
+          <Addlist projectId={projectId} className="inmodal" />
+      </Dialog>
+      </>
+      }
     </div>
     
     <Divider/>
@@ -148,7 +159,7 @@ return(
     <div style={{display:"flex", flexDirection :"row", flexWrap:'wrap' }} className="font-body">
                 {lists.map((list) => (
                   <>
-                   <CardsofList list={list} projectId= {projectId} listID={list.id}/>
+                   <CardsofList list={list} projectId= {projectId} listID={list.id} ismember={lengthmem()} project={project}/>
                    </>
                     ))}
                     

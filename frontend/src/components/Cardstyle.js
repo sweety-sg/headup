@@ -27,12 +27,13 @@ import Modal from '@mui/material/Modal';
 import './style.css'
 import EditCard from './editcard';
 import Chip from "@material-ui/core/Chip";
+import CommentPage from './commentpage';
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
   return <IconButton {...other} />;
 })(({ theme, expand }) => ({
-  transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
+  // transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
   marginLeft: 'auto',
   transition: theme.transitions.create('transform', {
     duration: theme.transitions.duration.shortest,
@@ -50,11 +51,14 @@ export default function Cardstyle(props) {
     const [proj, setProj] = React.useState({});
     const [card, setCard] = React.useState({asignees:[]});
     const [users, setUsers] = React.useState([]);
+    const [user, setUserinfo] = React.useState({});
     const [asn, setAsn] = React.useState([]);
+    const [ismember, setIsmember] = React.useState(0);
     // const [display, setDisplay] = React.useState("block")
     // const handleOpenproj = () => setOpenproj(true);
     const handleCloseproj = () => setOpenproj(false);
     const handleClosecard = () => setOpencard(false);
+    // setIsmember(props.ismember);
  const handleDelete= ()=>{
      if(props.type=="project"){
          console.log("hiii there");
@@ -91,8 +95,20 @@ export default function Cardstyle(props) {
       })
       .catch((error) => console.log(error + "uff"));
 }
+async function fetchUserDetails(){
+  axios
+      .get('http://127.0.0.1:3000/headup/user/info', {headers:{ "X-CSRFToken":Cookies.get('csrftoken')}})
+      .then((response) => {
+              setUserinfo(response.data)
+      
+      })
+      .catch((error) => {
+          console.log(error)
+      });
+}
 React.useEffect(() =>{
   fetchUsers()
+  fetchUserDetails()
 },[]);
 
  if(props.type=="project"){
@@ -240,11 +256,14 @@ function handleDeleteEventC(id) {
       }
 
       {!(props.link) &&
+      <>
         <CardContent>
         <Typography variant="body2" color="text.secondary">
         <div dangerouslySetInnerHTML={createMarkup()}></div>
         </Typography>
       </CardContent>
+      {/* <CommentPage userId={user.id} id={props.id}/> */}
+      </>
       }
         {/* {props.comp.asignees && (users!=[]) && card &&
         <>
@@ -280,23 +299,25 @@ function handleDeleteEventC(id) {
         {/* <IconButton aria-label="add to favorites">
           <FavoriteIcon />
         </IconButton> */}
-        <IconButton 
+        {/* <IconButton 
         aria-label="comment"
 
         >
           <CommentIcon style={{display: display}}/>
-        </IconButton>
-        {/* <ExpandMore
+        </IconButton> */}
+        {!(props.link)&&
+        <ExpandMore
           expand={expanded}
           onClick={handleExpandClick}
           aria-expanded={expanded}
           aria-label="show more"
         >
-          <ExpandMoreIcon />
-        </ExpandMore> */}
+          <CommentIcon />
+        </ExpandMore>
+}
       </CardActions>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
-        <CardContent>
+        {/* <CardContent>
           <Typography paragraph>Method:</Typography>
           <Typography paragraph>
             okay
@@ -304,7 +325,8 @@ function handleDeleteEventC(id) {
           <Typography>
             get lost
           </Typography>
-        </CardContent>
+        </CardContent> */}
+        <CommentPage userId={user.id} id={props.id}/>
       </Collapse>
     </Card>
   );

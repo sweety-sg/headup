@@ -85,10 +85,10 @@ class Cards(models.Model):
 
 
 class Comment(models.Model):
-    id = models.IntegerField(primary_key=True)
+    id = models.AutoField(primary_key=True)
     text = models.TextField(blank=True, null=True)
-    comment_by = models.ForeignKey(to=User, null=True, on_delete=models.SET_NULL, related_name='commentor')
-    card = models.ForeignKey(to=Cards,on_delete=models.CASCADE, related_name="card")
+    sender = models.ForeignKey(to=User, null=True, on_delete=models.SET_NULL, related_name='commentor')
+    card = models.ForeignKey(to=Cards,on_delete=models.CASCADE, related_name="comments_c")
     time = models.DateTimeField(default=datetime.now)
 
     class Meta(object):

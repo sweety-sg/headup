@@ -85,7 +85,7 @@ export default function Projects(){
             .get('http://127.0.0.1:3000/headup/user/')
             .then((response) => {
                 console.log("entered");
-                console.log(response.data);
+                // console.log(response.data);
                 setUsers(response.data);
                 console.log("fetched users");
             })
@@ -94,18 +94,19 @@ export default function Projects(){
 
     async function fetchProjects() {
                 axios
-                .get("http://127.0.0.1:3000/headup/project/")
+                .get("http://127.0.0.1:3000/headup/project/", {headers:{ "X-CSRFToken":Cookies.get('csrftoken')}})
                 .then((response) => {
                     setProjects(response.data)
-                    console.log(response)
+                    // console.log(response)
                 })
-                .catch((error) => console.log(error + "uff"));
+                .catch((error) => console.log("noo" + error + "uff"));
             
             
             }
     React.useEffect(() =>{
-        fetchProjects()
-        fetchUsers()
+        fetchProjects();
+        fetchUsers();
+        fetchUserDetails();
     },[]);
 
     return(
@@ -123,7 +124,9 @@ export default function Projects(){
                 <>
                 
                 {project.visible &&
-                <Card sx={{ maxWidth: 345 , margin:"2rem"}} className="project-card">
+                <>
+                <Link to= {`projects/${project.id}`} style={{textDecoration: "None"}}>
+                <Card sx={{ maxWidth: 345 , margin:"2rem"}} className="project-card popeffect">
                 <CardHeader 
                   avatar={
                     <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe" src="">
@@ -146,7 +149,7 @@ export default function Projects(){
                     <Typography variant="body2" color="text.primary">
                     Members:
                     </Typography>
-                        {project.project_members.map((value) => (
+                        {/* {project.project_members.map((value) => (
                         <Chip
                             avatar={<Avatar 
                                 alt={value.full_name} 
@@ -163,13 +166,15 @@ export default function Projects(){
                             variant="outlined"
                             className="name-chip"
                         />
-                        ))}
+                        ))} */}
                     </div>
                     <div className="member-chips">
                     <Typography variant="body2" color="text.primary">
                     Admins:
                     </Typography>
-                        {project.project_admins.map((value) => (
+                  
+                        {/* {project.project_admins.map((value) => (
+                          
                         <Chip
                             avatar=
                             {<Avatar alt={
@@ -187,16 +192,12 @@ export default function Projects(){
                             className="name-chip"
                             variant="outlined"
                         />
-                        ))}
+                          
+                        ))} */}
                     </div>
                 </CardContent>
                 <CardActions disableSpacing style={{justifySelf:"flex-end"}} className="end">
-                  {/* <IconButton aria-label="add to favorites">
-                    <FavoriteIcon />
-                  </IconButton>
-                  <IconButton aria-label="share">
-                    <ShareIcon />
-                  </IconButton> */}
+                 
                   <ExpandMore
                     expand={expanded}
                     onClick={handleExpandClick}
@@ -216,6 +217,8 @@ export default function Projects(){
                   </CardContent>
                 </Collapse>
               </Card>
+              </Link>
+              </>
             }
                  </> 
             ))}

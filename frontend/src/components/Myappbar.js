@@ -39,6 +39,8 @@ import './style.css'
 import { useHistory } from "react-router-dom";
 import { ClickAwayListener } from '@mui/material';
 import { logout } from './Login/logout';
+import { Dialog } from '@mui/material';
+import Grow from "@material-ui/core/Grow";
 
 const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
@@ -274,17 +276,18 @@ const useStyles = makeStyles((theme) => ({
             </Tooltip>
             
 
-            <Modal
+            <Dialog
             open={openproj}
             onClose={handleCloseproj}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
+            // aria-labelledby="modal-modal-title"
+            // aria-describedby="modal-modal-description"
             className= "modalclass"
+            TransitionComponent={Grow}
             >
             <div>
-            <HighlightOffIcon style={{ position: "absolute" , right: "40px", top:"10px"}} onClick={handleCloseproj}/>
+            {/* <HighlightOffIcon style={{ position: "absolute" , right: "40px", top:"10px"}} onClick={handleCloseproj}/> */}
             <NewProject/>
-            </div></Modal>
+            </div></Dialog>
                  
             <IconButton color="inherit">
               <Badge badgeContent={4} color="secondary">
@@ -296,7 +299,7 @@ const useStyles = makeStyles((theme) => ({
             <Avatar {...stringAvatar(userinfo.full_name)}
             sx={{ width: 28, height: 28, margin: "6px",alignSelf:"center", marginLeft:"12px", fontSize:"15px" }}
             // className="user-icon"
-            // onClick={logout()}
+            onClick={logout()}
              />
              </IconButton>
              {/* <ClickAwayListener onClickAway={handleClickAway}>

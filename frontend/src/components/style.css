@@ -13,12 +13,12 @@
     background: white;
     opacity: 1;
     width: 500px;
-    padding: 2rem;
+    padding: 0 !important;
     position: absolute;
     margin: auto;
-    border: 2px solid #e6e6e6;
-    overflow: scroll;
-    max-height: 100%;
+    border: 1px solid #e6e6e6;
+    overflow:scroll;
+    height: 100%;
     /* "#E66800" */
     /* color: white; */
 }
@@ -134,4 +134,52 @@
 }
 .name-chip:hover{
     background: #e6e6e6;
+}
+.inmodal{
+    margin:0 !important;
+    height: 100% !important;
+}
+.comm{
+    width:100%;
+    display:flex;
+    
+}
+.cmt-right{
+    margin-left:auto;
+    margin-right:0;
+    text-align: right;
+}
+.cmt-left{
+
+}
+.flex-div-comment-right{
+    margin-left:auto;
+    margin-right:0;
+   min-width: 100px;
+    padding: 0.5rem;
+   /* justify-self: flex-end !important;
+   align-self: flex-end !important;
+   position: relative;
+   right: 0; */
+   background: #336EF1;
+   color: white;
+   margin-bottom: 1rem;
+   border-radius: 8px;
+
+
+}
+.flex-div-comment-left{
+    min-width: 100px;
+    left:0;
+    padding: 0.5rem;
+    background: #ececec;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+}
+
+.right-text{
+    text-align: right;
+}
+.left-text{
+    text-align: left;
 }

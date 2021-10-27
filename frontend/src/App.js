@@ -12,6 +12,7 @@ import NewProject from './components/newProject';
 import  Cardstyle from './components/Cardstyle';
 import EditProject from './components/editproject';
 import ProjectPage from './components/projectpage';
+import CommentPage from './components/commentpage';
 import CurrentUser from "./components/currentuser";
 import Users from "./components/users";
 import Projects from './components/projects';
@@ -52,6 +53,7 @@ const App = () => {
       <Route exact path="/404">
         <Error />
       </Route> 
+      <Route exact path="/projects/:projectId/comments/:cardId" component={CommentPage} />
       {/* <Users /> */}
     </div>
     

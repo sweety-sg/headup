@@ -9,6 +9,9 @@ router.register(r'user',UserViewSet, basename='user')
 router.register(r'project',ProjectViewSet, basename='project')
 router.register(r'list',ListViewSet, basename='list')
 router.register(r'card',CardViewSet, basename='card')
+router.register(r'comment',CommentViewSet, basename='comment')
+router.register(r'question',QuestionViewSet, basename='question')
+
 
 
 urlpatterns = [
@@ -22,6 +25,7 @@ urlpatterns = [
     path('project/<int:pk>/lists/<int:lk>', Cards_v.as_view()),
     path('project/<int:pk>/members', MembersofProject_v.as_view()),
     path('list/<int:pk>/cards', CardsOfLists.as_view()),
+    path('card/<int:pk>/comments', CommentsOfCard.as_view()),
     
 ]
 urlpatterns += router.urls

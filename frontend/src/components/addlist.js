@@ -20,8 +20,10 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
 import Chip from "@material-ui/core/Chip";
 import { Editor } from '@tinymce/tinymce-react';
+import { useHistory } from "react-router-dom";
 
 export default function Addlist(props){
+  let history = useHistory();
     const projectId = props.projectId
     const [formData, setFormData] = React.useState({
         name: "",
@@ -29,6 +31,24 @@ export default function Addlist(props){
       });
     // const [description, setDescription] = React.useState("");
     const [status, setStatus] = React.useState("");
+    const [userinfo, setUserinfo] = React.useState({full_name:"no name"});
+
+    async function fetchUserDetails(){
+                axios
+                    .get('http://127.0.0.1:3000/headup/user/info', {headers:{ "X-CSRFToken":Cookies.get('csrftoken')}})
+                    .then((response) => {
+                        if(response.data.disabled){
+                            history.push("/404");
+                        }
+                        else{
+                            setUserinfo(response.data)
+                        }
+                    })
+                    .catch((error) => {
+                        history.push("/");
+                        console.log(error)
+                    });
+            }
 
     const handleFormChange = (event) => {
         const { name, value } = event.target;
@@ -71,7 +91,7 @@ export default function Addlist(props){
       };
 
     React.useEffect(()=>{
-
+      fetchUserDetails();
     }, []);
 
     return(

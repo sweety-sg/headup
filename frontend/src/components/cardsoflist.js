@@ -57,7 +57,7 @@ import Cookies from 'js-cookie';
 class CardsofList extends React.Component{
     constructor(props){
         super(props);
-        console.log(this.props.list.id + this.props.list.name);
+        console.log(this.props.list.id + this.props.list.name+ "jello");
         this.state = {
             cards : [],
             list: this.props.list,
@@ -67,6 +67,9 @@ class CardsofList extends React.Component{
             openeditlist: false,
             openWarn: false,
             anchorel: null,
+            project: this.props.project,
+            userId: 0,
+            // ismember: this.props.ismember,
           }
         // this.fetchTasks = this.fetchTasks.bind(this)
     }
@@ -76,6 +79,13 @@ class CardsofList extends React.Component{
     this.setState({opencard: !this.state.opencard})
     
   };
+  lengthmem = ()=>{
+    return (this.state.project.members.filter((pro)=> pro == this.state.userId)).length
+ }
+ fetchUserDetails(){
+  
+}
+
 //   handleOpen = () => {tthis.setState({openlist: true})}
 //    handleClose = () => {this.setState({openlist: false})}
 //    handleOpenproj = () => {this.setState({openproj: true})}
@@ -121,12 +131,27 @@ Transition = React.forwardRef(function Transition(props, ref) {
           } catch (e) {
             console.log(e);
           }
+
+          axios
+      .get('http://127.0.0.1:3000/headup/user/info', {headers:{ "X-CSRFToken":Cookies.get('csrftoken')}})
+      .then((response) => {
+          if(response.data.disabled){
+          }
+          else{
+            this.setState({userId: response.data.id})
+            // console.log(response.data + "userid")
+          }
+      })
+      .catch((error) => {
+          console.log(error)
+      });
           
 
     }
     renderItems = () => {
         const cards = this.state.cards;
         const listId = this.state.listId;
+        const ismember = this.lengthmem();
         
         return(
             <>
@@ -139,7 +164,9 @@ Transition = React.forwardRef(function Transition(props, ref) {
                             <AssignmentIcon />
                           </Avatar>
                         }
+                        
                         action={
+                          ismember !=0 &&
                             <div>
                         <IconButton aria-label="settings" onClick={() => this.handleOpeneditlist()} >
                             <EditOutlinedIcon style={{fill:"#5CD85A"}} />
@@ -152,6 +179,7 @@ Transition = React.forwardRef(function Transition(props, ref) {
                         </IconButton>
                         </div>
                         }
+                      
                         title={this.state.list.name}
                         // subheader={props.subtitle}
                     />
@@ -191,14 +219,15 @@ Transition = React.forwardRef(function Transition(props, ref) {
                             {cards.map((card) => (
                             <>
                         <div style={{margin: "20", display:"flex", padding:15, width:"100%"}}>
-                        <Cardstyle title= {card.title}  content={card.description} type="card" id={card.id} status={card.status} comp={card} projectId={this.state.projectId}/>
+                        <Cardstyle title= {card.title}  content={card.description} type="card" id={card.id} status={card.status} comp={card} projectId={this.state.projectId} ismember={ismember}/>
                         <Divider/>
                             </div>
                             </>
                                 ))}
                                 
                         </div>
-
+                        {ismember !=0 &&
+                        <>
                         <Button aria-describedby={this.state.list.id} variant="outlined" startIcon= {<AddIcon/>} onClick={this.handleClick} style={{margin: 15}}>
                         Add Card
                         </Button>
@@ -208,6 +237,8 @@ Transition = React.forwardRef(function Transition(props, ref) {
                             <Addcard list={this.state.list} projectId={this.state.projectId}/>
                         </Box>
                         </Popper>
+                        </>
+                      }
                          </Card>
                    </div>
                    </>
